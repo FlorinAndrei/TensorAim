@@ -1,5 +1,5 @@
 # TensorAim
-fly a drone, run TensorFlow image recognition, recognize people, point a video camera at them, record video
+fly a drone, run TensorFlow image recognition, recognize people, TF points a video camera at them, records video
 
 Not much to see here yet.
 

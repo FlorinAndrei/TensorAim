@@ -64,6 +64,6 @@ snow(cc, 10, int(width * height / 10000), width, height)
 #raster = workspace.get_data()
 #np.savetxt('raster.txt', raster)
 
-#workspace.write_to_png('test.png')
+workspace.write_to_png('test.png')
 
 # TODO: pickle

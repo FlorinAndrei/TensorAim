@@ -46,6 +46,8 @@ def fuzzy_circle(ctext, mrad, thick, steps, w, h):
 
 
 width, height = 640, 480
+tgrad, tgthick, tgstep = 50, 2, 10
+snrad = 10
 
 raster = np.zeros(shape=(height, width), dtype=np.uint32)
 workspace = cairo.ImageSurface.create_for_data(raster, cairo.FORMAT_ARGB32, width, height)
@@ -56,10 +58,10 @@ cc.set_source_rgb(1, 1, 1)
 cc.paint()
 
 # paint the target
-x, y = fuzzy_circle(cc, 50, 2, 10, width, height)
+x, y = fuzzy_circle(cc, tgrad, tgthick, tgstep, width, height)
 
 # make it snow
-snow(cc, 10, int(width * height / 10000), width, height)
+snow(cc, snrad, int(width * height / 10000), width, height)
 
 #raster = workspace.get_data()
 #np.savetxt('raster.txt', raster)

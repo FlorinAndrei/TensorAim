@@ -4,6 +4,8 @@
 import numpy as np
 import cairo
 import random
+from PIL import Image
+from pprint import pprint
 
 
 def snow(ctext, maxrad, num_flakes, w, h):
@@ -50,7 +52,7 @@ tgrad, tgthick, tgstep = 10, 1, 3
 snrad = 4
 
 raster = np.zeros(shape=(height, width), dtype=np.uint32)
-workspace = cairo.ImageSurface.create_for_data(raster, cairo.FORMAT_ARGB32, width, height)
+workspace = cairo.ImageSurface.create_for_data(raster, cairo.FORMAT_RGB24, width, height)
 cc = cairo.Context(workspace)
 
 # fill with white
@@ -63,9 +65,24 @@ x, y = fuzzy_circle(cc, tgrad, tgthick, tgstep, width, height)
 # make it snow
 snow(cc, snrad, int(width * height / 1000), width, height)
 
-#raster = workspace.get_data()
-#np.savetxt('raster.txt', raster)
 
-workspace.write_to_png('test.png')
+# convert the workspace to a monochrome 8 bit image
+
+# make an output raster with all pixels decomposed as RGB triplets
+buf = workspace.get_data()
+rasout = np.ndarray(shape=(height, width, 4), dtype=np.uint8, buffer=buf)
+# slice off the unused alpha channel
+rasout = rasout[:, :, :3]
+# convert to mono by flattening the 3D matrix
+rasout = np.mean(rasout, axis=2)
+# maximize contrast by expanding the range to 0-255
+rmin = np.min(rasout)
+rmax = np.max(rasout)
+output = np.empty(np.shape(rasout), dtype=np.uint8)
+output = np.interp(rasout, [rmin, rmax], [0, 255]).astype(np.uint8)
+
+# save image
+im = Image.fromarray(output, 'L')
+im.save('test.png')
 
 # TODO: pickle

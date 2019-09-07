@@ -57,6 +57,7 @@ cc = cairo.Context(workspace)
 
 print('Generating image set with', setsize, 'images:')
 
+# keep everything in a list
 train_set = []
 
 for step in range(setsize):

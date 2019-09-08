@@ -15,4 +15,6 @@ Use x and y to aim a gimbal with the video camera. Then start filming as long as
 
 ## Current status
 
-Just building synthetic training data - each image contains a fuzzy circle (the object that needs to be recognized) and many noise dots. This will be used to figure out how to build the TF model.
+Building synthetic training data is complete - each image contains a fuzzy circle (the object that needs to be recognized) and many noise dots.
+
+Now training the model.

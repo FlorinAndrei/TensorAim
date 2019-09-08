@@ -112,6 +112,6 @@ for step in range(setsize):
   gc.enable()
 
 # pickle the set
-pickle.dump(train_set, open('train_set.p', 'wb'))
+pickle.dump(train_set, open('synthetic_data.p', 'wb'))
 
 print('All done.')

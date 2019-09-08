@@ -7,6 +7,7 @@ from tensorflow import keras
 # Helper libraries
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 from pprint import pprint
 
 # CUDA vs CPU
@@ -19,9 +20,9 @@ def create_model():
     # dense 128-node layer
     # dense softmax output layer
     model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(28, 28)),
-        keras.layers.Dense(128, activation=tf.nn.relu),
-        keras.layers.Dense(10, activation=tf.nn.softmax)
+        keras.layers.Flatten(input_shape=(90, 120)),
+        keras.layers.Dense(1800, activation=tf.nn.relu),
+        keras.layers.Dense(2, activation=tf.nn.softmax)
     ])
     
     # compile the model
@@ -40,25 +41,45 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,
                                                  verbose=1,
                                                  save_freq='epoch')
 
+"""
 # load train/test data
 fashion_mnist = keras.datasets.fashion_mnist
 (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
 class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+"""
+
+syndata = pickle.load(open('synthetic_data.p', 'rb'))
+syntot = len(syndata)
+syntrain = int(syntot * 80 / 100)
+
+train_images = np.empty((syntrain, 90, 120), dtype=np.uint8)
+train_labels = np.empty((syntrain), dtype=np.uint8)
+test_images = np.empty((syntot - syntrain, 90, 120), dtype=np.uint8)
+test_labels = np.empty((syntot - syntrain), dtype=np.uint8)
+for i in range(0, syntrain):
+    obj = syndata[i]
+    train_images[i, :, :] = obj[2]
+    train_labels[i] = int(obj[0])
+for i in range(syntrain, syntot):
+    j = i - syntrain
+    obj = syndata[i]
+    test_images[j, :, :] = obj[2]
+    test_labels[j] = int(obj[0])
 
 # print shape/size for train/test data
-print(train_images.shape, len(train_labels), test_images.shape, len(test_labels))
+print(train_images.shape, type(train_images), len(train_labels), test_images.shape, len(test_labels))
+
+# normalize pixel values (0...1)
+train_images = train_images / 255.0
+test_images = test_images / 255.0
 
 # show first image
 plt.figure()
 plt.imshow(train_images[0])
 plt.colorbar()
 plt.grid(False)
-#plt.show()
-
-# normalize pixel values (0...1)
-train_images = train_images / 255.0
-test_images = test_images / 255.0
+plt.show()
 
 # show first 25 images, sanity check
 plt.figure(figsize=(10,10))
@@ -67,9 +88,9 @@ for i in range(25):
     plt.xticks([])
     plt.yticks([])
     plt.grid(False)
-    plt.imshow(train_images[i], cmap=plt.cm.binary)
-    plt.xlabel(class_names[train_labels[i]])
-#plt.show()
+    plt.imshow(train_images[i])
+    plt.xlabel(train_labels[i])
+plt.show()
 
 model = create_model()
 

@@ -68,7 +68,7 @@ for step in range(setsize):
   
   if step % 4 == 0:
     # no target
-    x, y= 0, 0
+    x, y = 0, 0
     is_target = False
   else:
     # paint the target

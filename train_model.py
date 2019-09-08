@@ -49,6 +49,7 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 """
 
+print('load data')
 syndata = pickle.load(open('synthetic_data.p', 'rb'))
 syntot = len(syndata)
 syntrain = int(syntot * 80 / 100)
@@ -68,7 +69,7 @@ for i in range(syntrain, syntot):
     test_labels[j] = obj[0]
 
 # print shape/size for train/test data
-print(train_images.shape, type(train_images), len(train_labels), test_images.shape, len(test_labels))
+print('train/test data size:', train_images.shape, len(train_labels), test_images.shape, len(test_labels))
 
 # normalize pixel values (0...1)
 train_images = train_images / 255.0

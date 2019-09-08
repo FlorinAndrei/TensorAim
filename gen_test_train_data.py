@@ -49,7 +49,7 @@ def fuzzy_circle(ctext, mrad, thick, steps, w, h):
 width, height = 120, 90
 tgrad, tgthick, tgstep = 10, 1, 3
 snrad = 4
-setsize = 10000
+setsize = 100000
 
 raster = np.zeros(shape=(height, width), dtype=np.uint32)
 workspace = cairo.ImageSurface.create_for_data(raster, cairo.FORMAT_RGB24, width, height)

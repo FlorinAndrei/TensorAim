@@ -27,6 +27,22 @@ def sharp_circle(ctext, rad, thick, col, x, y, fill):
   ctext.stroke()
 
 
+def sharp_square(ctext, halfw, thick, col, x, y):
+  ctext.rectangle(x-halfw, y-halfw, 2*halfw, 2*halfw)
+  ctext.set_line_width(thick)
+  ctext.set_source_rgb(col, col, col)
+  ctext.stroke()
+
+
+def fuzzy_square(ctext, mhalfw, thick, steps, w, h):
+  x, y = find_center(mhalfw, steps, w, h)
+  for i in range(steps):
+    col = i / (steps - 1)
+    sharp_square(ctext, mhalfw-i, thick, col, x, y)
+    sharp_square(ctext, mhalfw+i, thick, col, x, y)
+  return x, y
+
+
 def find_center(mrad, steps, w, h):
   wmin = steps + mrad
   wmax = w - steps - mrad
@@ -47,9 +63,11 @@ def fuzzy_circle(ctext, mrad, thick, steps, w, h):
 
 
 width, height = 120, 90
+# target radius, line thickness, steps
 tgrad, tgthick, tgstep = 10, 1, 3
+# snow radius
 snrad = 4
-setsize = 100000
+setsize = 1000
 
 raster = np.zeros(shape=(height, width), dtype=np.uint32)
 workspace = cairo.ImageSurface.create_for_data(raster, cairo.FORMAT_RGB24, width, height)
@@ -66,17 +84,21 @@ for step in range(setsize):
   cc.set_source_rgb(1, 1, 1)
   cc.paint()
   
-  if step % 4 == 0:
-    # no target
-    x, y = 0, 0
-    is_target = 0
-  else:
-    # paint the target
+  obj_kind = np.random.randint(2)
+  if obj_kind == 0:
+    # square
+    x, y = fuzzy_square(cc, tgrad, tgthick, tgstep, width, height)
+    obj_kind = 0
+  elif obj_kind == 1:
+    # round target
     x, y = fuzzy_circle(cc, tgrad, tgthick, tgstep, width, height)
-    is_target = 1
+    obj_kind = 1
+  else:
+    print('wrong value for obj_kind:', obj_kind)
+    exit()
   
   # make it snow
-  snow(cc, snrad, int(width * height / 1000), width, height)
+  #snow(cc, snrad, int(width * height / 1000), width, height)
   
   # convert the workspace to a monochrome 8 bit image
   
@@ -102,7 +124,7 @@ for step in range(setsize):
   # - the coordinates of the center of the target
   # - the whole image
   train_obj = []
-  train_obj.append(is_target)
+  train_obj.append(obj_kind)
   train_obj.append([x, y])
   train_obj.append(output)
   # append the object to the training set

@@ -69,11 +69,11 @@ for step in range(setsize):
   if step % 4 == 0:
     # no target
     x, y = 0, 0
-    is_target = False
+    is_target = 0
   else:
     # paint the target
     x, y = fuzzy_circle(cc, tgrad, tgthick, tgstep, width, height)
-    is_target = True
+    is_target = 1
   
   # make it snow
   snow(cc, snrad, int(width * height / 1000), width, height)

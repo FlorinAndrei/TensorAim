@@ -2,3 +2,4 @@
 *.p
 *.h5
 training
+logs

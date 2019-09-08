@@ -22,8 +22,8 @@ def create_model():
     # dense softmax output layer
     model = keras.Sequential([
         keras.layers.Flatten(input_shape=(90, 120)),
-        keras.layers.Dense(1800, activation=tf.nn.relu),
-        keras.layers.Dense(2, activation=tf.nn.softmax)
+        keras.layers.Dense(1800, activation='relu'),
+        keras.layers.Dense(2, activation='softmax')
     ])
     
     # compile the model

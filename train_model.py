@@ -60,12 +60,12 @@ test_labels = np.empty((syntot - syntrain), dtype=np.uint8)
 for i in range(0, syntrain):
     obj = syndata[i]
     train_images[i, :, :] = obj[2]
-    train_labels[i] = int(obj[0])
+    train_labels[i] = obj[0]
 for i in range(syntrain, syntot):
     j = i - syntrain
     obj = syndata[i]
     test_images[j, :, :] = obj[2]
-    test_labels[j] = int(obj[0])
+    test_labels[j] = obj[0]
 
 # print shape/size for train/test data
 print(train_images.shape, type(train_images), len(train_labels), test_images.shape, len(test_labels))

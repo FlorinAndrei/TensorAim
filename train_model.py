@@ -8,6 +8,7 @@ from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
+import datetime
 from pprint import pprint
 
 # CUDA vs CPU
@@ -95,8 +96,11 @@ plt.show()
 
 model = create_model()
 
+log_dir="logs/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=os.path.normpath(log_dir), histogram_freq=1)
+
 # train the model
-model.fit(train_images, train_labels, epochs=5, callbacks = [cp_callback])
+model.fit(train_images, train_labels, epochs=5, callbacks = [cp_callback, tensorboard_callback])
 
 # final save as H5
 model.save('sentry.h5')

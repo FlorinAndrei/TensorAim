@@ -17,6 +17,8 @@ import os
 
 def create_model():
     # build the model
+    
+    """
     # flat 1D layer
     # dense 128-node layer
     # dense softmax output layer
@@ -25,13 +27,31 @@ def create_model():
         keras.layers.Dense(1800, activation='relu'),
         keras.layers.Dense(2, activation='softmax')
     ])
+    """
+    
+    model = keras.Sequential([
+        keras.layers.Conv2D(filters=32, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu', input_shape=(90,120,1)),
+        keras.layers.Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu'),
+        keras.layers.MaxPooling2D(pool_size=(2,2)),
+        keras.layers.Dropout(0.25),
+        keras.layers.Flatten(),
+        keras.layers.Dense(units=100, activation='relu'),
+        keras.layers.Dropout(0.5),
+        keras.layers.Dense(units=2, activation='softmax')
+    ])
     
     # compile the model
+    
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
+        
+    """
+    model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['acc'])
+    """
     
     print(model.summary())
+    
     return model
 
 # how to save the trained model
@@ -55,9 +75,9 @@ syndata = pickle.load(open('synthetic_data.p', 'rb'))
 syntot = len(syndata)
 syntrain = int(syntot * 80 / 100)
 
-train_images = np.empty((syntrain, 90, 120), dtype=np.uint8)
+train_images = np.empty((syntrain, 90, 120, 1), dtype=np.uint8)
 train_labels = np.empty((syntrain), dtype=np.uint8)
-test_images = np.empty((syntot - syntrain, 90, 120), dtype=np.uint8)
+test_images = np.empty((syntot - syntrain, 90, 120, 1), dtype=np.uint8)
 test_labels = np.empty((syntot - syntrain), dtype=np.uint8)
 for i in range(0, syntrain):
     obj = syndata[i]
@@ -70,7 +90,7 @@ for i in range(syntrain, syntot):
     test_labels[j] = obj[0]
 
 # print shape/size for train/test data
-print('train/test data size:', train_images.shape, len(train_labels), test_images.shape, len(test_labels))
+print('\n', 'train/test data size:', train_images.shape, len(train_labels), test_images.shape, len(test_labels), '\n')
 
 # normalize pixel values (0...1)
 train_images = train_images / 255.0
@@ -78,7 +98,8 @@ test_images = test_images / 255.0
 
 # show first image
 plt.figure()
-plt.imshow(train_images[0])
+imsample = train_images[0].reshape((90,120,))
+plt.imshow(imsample)
 plt.colorbar()
 plt.grid(False)
 plt.show()
@@ -90,7 +111,8 @@ for i in range(25):
     plt.xticks([])
     plt.yticks([])
     plt.grid(False)
-    plt.imshow(train_images[i])
+    imsample = train_images[i].reshape((90,120,))
+    plt.imshow(imsample)
     plt.xlabel(train_labels[i])
 plt.show()
 
@@ -100,7 +122,11 @@ log_dir="logs/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=os.path.normpath(log_dir), histogram_freq=1)
 
 # train the model
-model.fit(train_images, train_labels, epochs=5, callbacks = [cp_callback, tensorboard_callback])
+model.fit(train_images,
+          train_labels,
+          epochs=5,
+          callbacks = [tensorboard_callback])
+#          callbacks = [cp_callback, tensorboard_callback])
 
 # final save as H5
 model.save('sentry.h5')

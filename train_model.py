@@ -9,11 +9,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 import datetime
+import argparse
 from pprint import pprint
 
-# CUDA vs CPU
 import os
-#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 def create_model():
     # build the model
@@ -53,6 +52,14 @@ def create_model():
     print(model.summary())
     
     return model
+
+parser = argparse.ArgumentParser(description='train the model')
+parser.add_argument('--view', action='store_true', help='view training image samples')
+parser.add_argument('--cpu', action='store_true', help='run on CPU instead of GPU')
+args = parser.parse_args()
+
+if args.cpu:
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # how to save the trained model
 checkpoint_path = os.path.normpath("training/sentry-{epoch:04d}.ckpt")
@@ -102,7 +109,8 @@ imsample = train_images[0].reshape((90,120,))
 plt.imshow(imsample)
 plt.colorbar()
 plt.grid(False)
-plt.show()
+if args.view:
+    plt.show()
 
 # show first 25 images, sanity check
 plt.figure(figsize=(10,10))
@@ -114,7 +122,8 @@ for i in range(25):
     imsample = train_images[i].reshape((90,120,))
     plt.imshow(imsample)
     plt.xlabel(train_labels[i])
-plt.show()
+if args.view:
+    plt.show()
 
 model = create_model()
 

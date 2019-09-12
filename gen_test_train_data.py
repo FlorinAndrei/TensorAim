@@ -67,7 +67,7 @@ width, height = 120, 90
 tgrad, tgthick, tgstep = 10, 1, 3
 # snow radius
 snrad = 4
-setsize = 1000
+setsize = 10000
 
 raster = np.zeros(shape=(height, width), dtype=np.uint32)
 workspace = cairo.ImageSurface.create_for_data(raster, cairo.FORMAT_RGB24, width, height)
@@ -108,7 +108,7 @@ for step in range(setsize):
   # slice off the unused alpha channel
   rasout = rasout[:, :, :3]
   # convert to mono by flattening the 3D matrix
-  rasout = np.mean(rasout, axis=2)
+  rasout = np.mean(rasout, axis=2, keepdims=True)
   # maximize contrast by expanding the range to 0-255
   rmin = np.min(rasout)
   rmax = np.max(rasout)

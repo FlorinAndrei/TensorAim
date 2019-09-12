@@ -3,6 +3,7 @@ import cairo
 import random
 from PIL import Image
 import pickle
+import argparse
 import gc
 from pprint import pprint
 
@@ -62,6 +63,10 @@ def fuzzy_circle(ctext, mrad, thick, steps, w, h):
   return x, y
 
 
+parser = argparse.ArgumentParser(description='generate synthetic training data')
+parser.add_argument('--snow', action='store_true', help='add snow to images')
+args = parser.parse_args()
+
 width, height = 120, 90
 # target radius, line thickness, steps
 tgrad, tgthick, tgstep = 10, 1, 3
@@ -97,8 +102,8 @@ for step in range(setsize):
     print('wrong value for obj_kind:', obj_kind)
     exit()
   
-  # make it snow
-  #snow(cc, snrad, int(width * height / 1000), width, height)
+  if args.snow:
+    snow(cc, snrad, int(width * height / 1000), width, height)
   
   # convert the workspace to a monochrome 8 bit image
   

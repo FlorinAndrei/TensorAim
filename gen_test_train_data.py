@@ -68,8 +68,10 @@ parser.add_argument('--snow', action='store_true', help='add snow to images')
 args = parser.parse_args()
 
 width, height = 120, 90
-# target radius, line thickness, steps
-tgrad, tgthick, tgstep = 10, 1, 3
+# target radius
+tgradmin, tgradmax = 8, 40
+# target line thickness, steps
+tgthick, tgstep = 1, 3
 # snow radius
 snrad = 4
 setsize = 10000
@@ -90,6 +92,7 @@ for step in range(setsize):
   cc.paint()
   
   obj_kind = np.random.randint(2)
+  tgrad = random.randint(tgradmin, tgradmax)
   if obj_kind == 0:
     # square
     x, y = fuzzy_square(cc, tgrad, tgthick, tgstep, width, height)

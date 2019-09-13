@@ -3,8 +3,13 @@ from tensorflow import keras
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
+import argparse
 import time
 
+
+parser = argparse.ArgumentParser(description='test the model')
+parser.add_argument('--cli', action='store_true', help='run without GUI')
+args = parser.parse_args()
 
 model = keras.models.load_model('sentry.h5')
 tr_data = pickle.load(open('synthetic_data.p', 'rb'))
@@ -29,5 +34,10 @@ for i in range(0, img_count):
   plt.imshow(imr)
   plt.colorbar()
   plt.grid(False)
-  plt.xlabel(pred + '    ' + dur)
-  plt.show()
+  legend = pred + '    ' + dur
+  plt.xlabel(legend)
+  if args.cli:
+    print(legend)
+    time.sleep(1)
+  else:
+    plt.show()

@@ -125,7 +125,7 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=os.path.normpath(l
 # train the model
 model.fit(train_images,
           train_labels,
-          epochs=5,
+          epochs=10,
           callbacks = [tensorboard_callback])
 #          callbacks = [cp_callback, tensorboard_callback])
 

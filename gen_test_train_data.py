@@ -4,6 +4,7 @@ import random
 from PIL import Image
 import pickle
 import argparse
+import math
 import gc
 from pprint import pprint
 
@@ -68,10 +69,12 @@ parser.add_argument('--snow', action='store_true', help='add snow to images')
 args = parser.parse_args()
 
 width, height = 120, 90
+# target line thickness
+tgthick = 1
+# target steps
+tgstepmin, tgstepmax = 2, 10
 # target radius
-tgradmin, tgradmax = 8, 40
-# target line thickness, steps
-tgthick, tgstep = 1, 3
+tgradmin, tgradmax = 8, math.floor(height/2 - tgstepmax - 1)
 # snow radius
 snrad = 4
 setsize = 10000
@@ -93,6 +96,9 @@ for step in range(setsize):
   
   obj_kind = np.random.randint(2)
   tgrad = random.randint(tgradmin, tgradmax)
+  tgstep = random.randint(tgstepmin, tgstepmax)
+  if tgstep >= tgrad:
+    tgstep = tgrad - 1
   if obj_kind == 0:
     # square
     x, y = fuzzy_square(cc, tgrad, tgthick, tgstep, width, height)

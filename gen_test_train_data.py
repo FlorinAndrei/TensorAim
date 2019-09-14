@@ -65,7 +65,7 @@ def fuzzy_circle(ctext, mrad, thick, steps, w, h):
 
 
 parser = argparse.ArgumentParser(description='generate synthetic training data')
-parser.add_argument('--snow', type=int, default=1000, help='snow factor, default=1000, bigger means less snow')
+parser.add_argument('--snow', type=int, default=100, help='snow factor, default=100, bigger means less snow')
 args = parser.parse_args()
 
 width, height = 120, 90

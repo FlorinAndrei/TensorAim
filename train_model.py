@@ -15,19 +15,8 @@ from pprint import pprint
 import os
 
 def create_model():
+    
     # build the model
-    
-    """
-    # flat 1D layer
-    # dense 128-node layer
-    # dense softmax output layer
-    model = keras.Sequential([
-        keras.layers.Flatten(input_shape=(90, 120)),
-        keras.layers.Dense(1800, activation='relu'),
-        keras.layers.Dense(2, activation='softmax')
-    ])
-    """
-    
     model = keras.Sequential([
         keras.layers.Conv2D(filters=32, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu', input_shape=(90,120,1)),
         keras.layers.Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu'),
@@ -40,7 +29,6 @@ def create_model():
     ])
     
     # compile the model
-    
     model.compile(optimizer='adam',
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])

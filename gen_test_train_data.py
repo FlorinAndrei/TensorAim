@@ -65,7 +65,7 @@ def fuzzy_circle(ctext, mrad, thick, steps, w, h):
 
 
 parser = argparse.ArgumentParser(description='generate synthetic training data')
-parser.add_argument('--snow', action='store_true', help='add snow to images')
+parser.add_argument('--snow', type=int, default=1000, help='snow factor, default=1000, bigger means less snow')
 args = parser.parse_args()
 
 width, height = 120, 90
@@ -111,8 +111,7 @@ for step in range(setsize):
     print('wrong value for obj_kind:', obj_kind)
     exit()
   
-  if args.snow:
-    snow(cc, snrad, int(width * height / 1000), width, height)
+  snow(cc, snrad, int(width * height / args.snow), width, height)
   
   # convert the workspace to a monochrome 8 bit image
   

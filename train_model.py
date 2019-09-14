@@ -54,6 +54,7 @@ def create_model():
     return model
 
 parser = argparse.ArgumentParser(description='train the model')
+parser.add_argument('--epochs', type=int, default=5, help='number of training epochs')
 parser.add_argument('--view', action='store_true', help='view training image samples')
 parser.add_argument('--cpu', action='store_true', help='run on CPU instead of GPU')
 args = parser.parse_args()
@@ -125,7 +126,7 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=os.path.normpath(l
 # train the model
 model.fit(train_images,
           train_labels,
-          epochs=10,
+          epochs=args.epochs,
           callbacks = [tensorboard_callback])
 #          callbacks = [cp_callback, tensorboard_callback])
 

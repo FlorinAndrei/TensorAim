@@ -13,7 +13,7 @@ def snow(ctext, maxrad, num_flakes, w, h):
   for i in range(num_flakes):
     x, y = find_center(maxrad, maxrad, w, h)
     for j in range(maxrad, 0, -1):
-      col = j / (maxrad - 1)
+      col = j / (maxrad + 1)
       ctext.arc(x, y, j, 0, 2 * np.pi)
       ctext.set_source_rgb(col, col, col)
       ctext.fill()

@@ -137,8 +137,6 @@ latest = tf.train.latest_checkpoint(checkpoint_dir)
 print('latest:', latest)
 
 # evaluate the model from the last save
-#model = create_model()
-#model.load_weights(latest)
-model = keras.models.load_model('sentry.h5')
+model = keras.models.load_model('saved_model')
 test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=0)
 print('Test accuracy:', test_acc)

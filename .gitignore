@@ -3,3 +3,4 @@
 *.h5
 training
 logs
+saved_model

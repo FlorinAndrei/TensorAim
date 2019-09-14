@@ -129,8 +129,8 @@ model.fit(train_images,
           callbacks = [tensorboard_callback])
 #          callbacks = [cp_callback, tensorboard_callback])
 
-# final save as H5
-model.save('sentry.h5')
+# final save
+model.save('saved_model', save_format='tf')
 
 latest = tf.train.latest_checkpoint(checkpoint_dir)
 print('latest:', latest)

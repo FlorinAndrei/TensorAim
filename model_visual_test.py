@@ -13,7 +13,7 @@ parser.add_argument('--nosleep', action='store_true', help='in CLI mode do not s
 parser.add_argument('--noprint', action='store_true', help='max speed in CLI mode')
 args = parser.parse_args()
 
-model = keras.models.load_model('sentry.h5')
+model = keras.models.load_model('saved_model')
 tr_data = pickle.load(open('synthetic_data.p', 'rb'))
 img_count = len(tr_data)
 test_img = np.empty((1, 90, 120, 1), dtype=np.float16)

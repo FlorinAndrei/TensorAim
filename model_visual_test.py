@@ -44,9 +44,11 @@ for i in range(0, img_count):
       time.sleep(1)
   else:
     imr = obj[2].reshape((90,120,))
-    plt.figure()
+    fig = plt.figure()
     plt.imshow(imr)
     plt.colorbar()
     plt.grid(False)
     plt.xlabel(legend)
-    plt.show()
+    plt.draw()
+    plt.waitforbuttonpress(0)
+    plt.close(fig)

@@ -8,4 +8,4 @@ mkdir images/small
 find images/original/* | cut -d / -f 3 | parallel \
   convert images/original/{} -colorspace RGB +sigmoidal-contrast 6.5,50% \
     -filter Lanczos -distort resize 120x90 \
-	-sigmoidal-contrast 6.5,50% -colorspace Gray images/small/{}.png
+    -sigmoidal-contrast 6.5,50% -colorspace Gray images/small/{}.png

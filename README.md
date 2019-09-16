@@ -18,3 +18,5 @@ Use x and y to aim a gimbal with the video camera. Then start filming as long as
 Building synthetic training data is complete - each image contains a fuzzy circle (the object that needs to be recognized) and many noise dots.
 
 Figuring out the best model architecture using the synthetic data.
+
+Collecting / organizing real-world training data has started.

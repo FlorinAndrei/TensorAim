@@ -50,6 +50,8 @@ args = parser.parse_args()
 if args.cpu:
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
 # how to save the trained model
 checkpoint_path = os.path.normpath("training/sentry-{epoch:04d}.ckpt")
 checkpoint_dir = os.path.dirname(checkpoint_path)
@@ -63,9 +65,9 @@ syndata = pickle.load(open('synthetic_data.p', 'rb'))
 syntot = len(syndata)
 syntrain = int(syntot * 80 / 100)
 
-train_images = np.empty((syntrain, 90, 120, 1), dtype=np.uint8)
+train_images = np.empty((syntrain, 90, 120, 1), dtype=np.float16)
 train_labels = np.empty((syntrain), dtype=np.uint8)
-test_images = np.empty((syntot - syntrain, 90, 120, 1), dtype=np.uint8)
+test_images = np.empty((syntot - syntrain, 90, 120, 1), dtype=np.float16)
 test_labels = np.empty((syntot - syntrain), dtype=np.uint8)
 for i in range(0, syntrain):
     obj = syndata[i]

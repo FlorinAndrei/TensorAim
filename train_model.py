@@ -55,8 +55,7 @@ checkpoint_path = os.path.normpath("training/sentry-{epoch:04d}.ckpt")
 checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,
                                                  save_weights_only=True,
-                                                 verbose=1,
-                                                 save_freq='epoch')
+                                                 verbose=1)
 
 print('load data')
 syndata = pickle.load(open('synthetic_data.p', 'rb'))
@@ -114,12 +113,11 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=os.path.normpath(l
 # train the model
 model.fit(train_images,
           train_labels,
-          epochs=args.epochs,
-          callbacks = [tensorboard_callback])
+          epochs=args.epochs)
 #          callbacks = [cp_callback, tensorboard_callback])
 
 # final save
-keras.models.save_model(model, 'saved_model.h5', save_format='h5')
+keras.models.save_model(model, 'saved_model.h5')
 
 latest = tf.train.latest_checkpoint(checkpoint_dir)
 print('latest:', latest)

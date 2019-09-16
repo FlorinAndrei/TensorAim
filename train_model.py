@@ -119,12 +119,12 @@ model.fit(train_images,
 #          callbacks = [cp_callback, tensorboard_callback])
 
 # final save
-model.save('saved_model', save_format='tf')
+keras.models.save_model(model, 'saved_model.h5', save_format='h5')
 
 latest = tf.train.latest_checkpoint(checkpoint_dir)
 print('latest:', latest)
 
 # evaluate the model from the last save
-model = keras.models.load_model('saved_model')
+model = keras.models.load_model('saved_model.h5')
 test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=0)
 print('Test accuracy:', test_acc)

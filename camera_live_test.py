@@ -11,6 +11,7 @@ ret = cap.set(3,640)
 ret = cap.set(4,480)
 
 model = keras.models.load_model('saved_model.h5')
+print(model.summary())
 
 while(True):
   t1 = int(round(time.time() * 1000))

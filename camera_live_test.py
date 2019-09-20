@@ -10,10 +10,10 @@ parser.add_argument('--defdriver', action='store_true', help='use default system
 args = parser.parse_args()
 
 if args.defdriver:
-  # use default driver
+  # use default system driver
   cap = cv2.VideoCapture(0)
 else:
-  # use DSHOW to get rid of the letterboxed format
+  # use DSHOW to get rid of the letterboxed format on some cameras
   cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # use the smallest available resolution

@@ -3,9 +3,19 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 import time
+import argparse
 
-# use DSHOW to get rid of the letterboxed format
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+parser = argparse.ArgumentParser(description='check the model with live images from camera')
+parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
+args = parser.parse_args()
+
+if args.defdriver:
+  # use default driver
+  cap = cv2.VideoCapture(0)
+else:
+  # use DSHOW to get rid of the letterboxed format
+  cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
 # use the smallest available resolution
 ret = cap.set(3,640)
 ret = cap.set(4,480)

@@ -22,3 +22,5 @@ Figuring out the best model architecture using the synthetic data.
 Collecting / organizing real-world training data has started.
 
 Testing synthetic data models agains live camera video.
+
+TensorFlow on Raspberry Pi is broken. Not going to fly a drone for now - let's run it on a laptop. Waiting for TF 2.0, hopefully it gets better.

@@ -20,3 +20,5 @@ Building synthetic training data is complete - each image contains a fuzzy circl
 Figuring out the best model architecture using the synthetic data.
 
 Collecting / organizing real-world training data has started.
+
+Testing synthetic data models agains live camera video.

@@ -50,6 +50,3 @@ for i in range(0, img_count):
     plt.grid(False)
     plt.xlabel(legend)
     plt.show()
-    #plt.draw()
-    #plt.waitforbuttonpress(0)
-    #plt.close(fig)

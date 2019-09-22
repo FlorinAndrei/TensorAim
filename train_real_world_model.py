@@ -50,13 +50,13 @@ labels = np.array(h5['labels'][:])
 
 h5.close()
 
-lentotal = images.shape[0]
-lentrain = int(lentotal * 80 / 100)
-
-randindex = np.arange(lentotal)
+randindex = np.arange(len(labels))
 np.random.shuffle(randindex)
 images = images[randindex, :, :, :]
 labels = labels[randindex]
+
+lentotal = len(labels)
+lentrain = int(lentotal * 80 / 100)
 
 images_train = np.empty((lentrain, 90, 120, 1), dtype=np.float32)
 labels_train = np.empty((lentrain), dtype=np.uint8)

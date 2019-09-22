@@ -22,10 +22,12 @@ def clicker(event):
 
 
 def typer(event):
-  global goback, plt
+  global goback, goforward, plt
 
   goback = False
+  goforward = False
   if event.key == 'escape':
+    goforward = True
     plt.close()
   if event.key == ' ':
     goback = True
@@ -49,6 +51,7 @@ imgs = os.listdir(origdir)
 i = 0
 learned = False
 goback = False
+goforward = False
 while i < len(imgs):
   iname = imgs[i]
   nameshort = iname.split('.')[0]
@@ -71,6 +74,8 @@ while i < len(imgs):
     jfile = open(imdf, 'w')
     json.dump(imgdata, jfile)
     jfile.close()
+  if goforward:
+    i = 0
   if goback:
     i = i - 1
     continue

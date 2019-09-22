@@ -104,6 +104,7 @@ for i in range(25):
     imsample = train_images[i].reshape((90,120,))
     plt.imshow(imsample)
     plt.xlabel(train_labels[i])
+
 if args.view:
     plt.show()
 

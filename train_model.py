@@ -64,9 +64,9 @@ syndata = pickle.load(open('synthetic_data.p', 'rb'))
 syntot = len(syndata)
 syntrain = int(syntot * 80 / 100)
 
-train_images = np.empty((syntrain, 90, 120, 1), dtype=np.float16)
+train_images = np.empty((syntrain, 90, 120, 1), dtype=np.float32)
 train_labels = np.empty((syntrain), dtype=np.uint8)
-test_images = np.empty((syntot - syntrain, 90, 120, 1), dtype=np.float16)
+test_images = np.empty((syntot - syntrain, 90, 120, 1), dtype=np.float32)
 test_labels = np.empty((syntot - syntrain), dtype=np.uint8)
 for i in range(0, syntrain):
     obj = syndata[i]

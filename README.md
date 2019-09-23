@@ -24,3 +24,5 @@ Collecting / organizing real-world training data has started.
 Testing synthetic data models agains live camera video.
 
 TensorFlow on Raspberry Pi is broken. Not going to fly a drone for now - let's run it on a laptop. Waiting for TF 2.0, hopefully it gets better.
+
+TensorAim can now detect humans in a live video stream.

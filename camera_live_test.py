@@ -7,6 +7,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='check the model with live images from camera')
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
+parser.add_argument('--model', type=str, help='model to load')
 args = parser.parse_args()
 
 if args.defdriver:
@@ -20,7 +21,7 @@ else:
 ret = cap.set(3,640)
 ret = cap.set(4,480)
 
-model = keras.models.load_model('saved_model.h5')
+model = keras.models.load_model(args.model)
 print(model.summary())
 
 while(True):
@@ -36,11 +37,13 @@ while(True):
   show2net = fframe.reshape(1, 90, 120, 1) / 255.0
   p = model.predict(show2net)
   t2 = int(round(time.time() * 1000))
-  if np.argmax(p) == 0:
-    pred = 'square'
-  if np.argmax(p) == 1:
-    pred = 'circle'
-  print(pred, '\t', int(1000/(t2-t1)), 'fps')
+  pred = p[0]
+  if pred[1] > 0.75:
+    beep = '\a'
+  else:
+    beep = ''
+  print(pred, '\t', int(1000/(t2-t1)), 'fps' + beep)
+  time.sleep(1)
   # quit
   if cv2.waitKey(1) & 0xFF == ord('q'):
     break

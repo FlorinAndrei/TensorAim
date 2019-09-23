@@ -50,6 +50,18 @@ labels = np.array(h5['labels'][:])
 
 h5.close()
 
+# "double" the size of the dataset by flipping images horizontally
+images_flip = np.flip(images, 2)
+labels_flip = labels
+images_big = np.concatenate((images, images_flip), axis=0)
+labels_big = np.concatenate((labels, labels_flip), axis=0)
+images = images_big
+labels = labels_big
+
+del images_flip, images_big, labels_flip, labels_big
+
+# shuffle (randomize) the data set
+# because successive images might be similar
 randindex = np.arange(len(labels))
 np.random.shuffle(randindex)
 images = images[randindex, :, :, :]

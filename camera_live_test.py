@@ -45,7 +45,6 @@ while(True):
   else:
     beep = ''
   print(pred, '\t', int(1000/(t2-t1)), 'fps' + beep)
-  time.sleep(1)
   # quit
   if cv2.waitKey(1) & 0xFF == ord('q'):
     break

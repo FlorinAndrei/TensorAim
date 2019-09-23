@@ -4,6 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 import time
 import argparse
+from playsound import playsound
 
 parser = argparse.ArgumentParser(description='check the model with live images from camera')
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
@@ -39,7 +40,8 @@ while(True):
   t2 = int(round(time.time() * 1000))
   pred = p[0]
   if pred[1] > 0.75:
-    beep = '\a'
+    beep = '    ############### HUMAN DETECTED! ################'
+    playsound('pew.wav')
   else:
     beep = ''
   print(pred, '\t', int(1000/(t2-t1)), 'fps' + beep)

@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import argparse
 import time
 
+import config
+
 
 parser = argparse.ArgumentParser(description='test the model')
 parser.add_argument('--cli', action='store_true', help='run without GUI')
@@ -17,7 +19,7 @@ model = keras.models.load_model('saved_model.h5')
 print(model.summary())
 tr_data = pickle.load(open('synthetic_data.p', 'rb'))
 img_count = len(tr_data)
-test_img = np.empty((1, 90, 120, 1), dtype=np.float16)
+test_img = np.empty((1, config.imgh, config.imgw, 1), dtype=np.float16)
 
 for i in range(0, img_count):
   obj = tr_data[i]
@@ -43,7 +45,7 @@ for i in range(0, img_count):
     else:
       time.sleep(1)
   else:
-    imr = obj[2].reshape((90,120,))
+    imr = obj[2].reshape((config.imgh,config.imgw,))
     fig = plt.figure()
     plt.imshow(imr)
     plt.colorbar()

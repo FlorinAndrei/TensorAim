@@ -10,15 +10,15 @@ import matplotlib.pyplot as plt
 import pickle
 import datetime
 import argparse
-from pprint import pprint
-
 import os
+
+import config
 
 def create_model():
     
     # build the model
     model = keras.Sequential([
-        keras.layers.Conv2D(filters=32, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu', input_shape=(90,120,1)),
+        keras.layers.Conv2D(filters=32, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu', input_shape=(config.imgh,config.imgw,1)),
         keras.layers.Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu'),
         keras.layers.MaxPooling2D(pool_size=(2,2)),
         keras.layers.Dropout(0.25),
@@ -64,9 +64,9 @@ syndata = pickle.load(open('synthetic_data.p', 'rb'))
 syntot = len(syndata)
 syntrain = int(syntot * 80 / 100)
 
-train_images = np.empty((syntrain, 90, 120, 1), dtype=np.float32)
+train_images = np.empty((syntrain, config.imgh, config.imgw, 1), dtype=np.float32)
 train_labels = np.empty((syntrain), dtype=np.uint8)
-test_images = np.empty((syntot - syntrain, 90, 120, 1), dtype=np.float32)
+test_images = np.empty((syntot - syntrain, config.imgh, config.imgw, 1), dtype=np.float32)
 test_labels = np.empty((syntot - syntrain), dtype=np.uint8)
 for i in range(0, syntrain):
     obj = syndata[i]
@@ -87,7 +87,7 @@ test_images = test_images / 255.0
 
 # show first image
 plt.figure()
-imsample = train_images[0].reshape((90,120,))
+imsample = train_images[0].reshape((config.imgh,config.imgw,))
 plt.imshow(imsample)
 plt.colorbar()
 plt.grid(False)
@@ -101,7 +101,7 @@ for i in range(25):
     plt.xticks([])
     plt.yticks([])
     plt.grid(False)
-    imsample = train_images[i].reshape((90,120,))
+    imsample = train_images[i].reshape((config.imgh,config.imgw,))
     plt.imshow(imsample)
     plt.xlabel(train_labels[i])
 

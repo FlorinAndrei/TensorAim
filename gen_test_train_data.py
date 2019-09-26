@@ -8,6 +8,8 @@ import math
 import gc
 from pprint import pprint
 
+import config
+
 
 def snow(ctext, maxrad, num_flakes, w, h):
   for i in range(num_flakes):
@@ -68,19 +70,18 @@ parser = argparse.ArgumentParser(description='generate synthetic training data')
 parser.add_argument('--snow', type=int, default=100, help='snow factor, default=100, bigger means less snow')
 args = parser.parse_args()
 
-width, height = 120, 90
 # target line thickness
 tgthick = 1
 # target steps
 tgstepmin, tgstepmax = 2, 10
 # target radius
-tgradmin, tgradmax = 8, math.floor(height/2 - tgstepmax - 1)
+tgradmin, tgradmax = 8, math.floor(config.imgh/2 - tgstepmax - 1)
 # snow radius
 snrad = 4
 setsize = 10000
 
-raster = np.zeros(shape=(height, width), dtype=np.uint32)
-workspace = cairo.ImageSurface.create_for_data(raster, cairo.FORMAT_RGB24, width, height)
+raster = np.zeros(shape=(config.imgh, config.imgw), dtype=np.uint32)
+workspace = cairo.ImageSurface.create_for_data(raster, cairo.FORMAT_RGB24, config.imgw, config.imgh)
 cc = cairo.Context(workspace)
 
 print('Generating image set with', setsize, 'images:')
@@ -101,23 +102,23 @@ for step in range(setsize):
     tgstep = tgrad - 1
   if obj_kind == 0:
     # square
-    x, y = fuzzy_square(cc, tgrad, tgthick, tgstep, width, height)
+    x, y = fuzzy_square(cc, tgrad, tgthick, tgstep, config.imgw, config.imgh)
     obj_kind = 0
   elif obj_kind == 1:
     # round target
-    x, y = fuzzy_circle(cc, tgrad, tgthick, tgstep, width, height)
+    x, y = fuzzy_circle(cc, tgrad, tgthick, tgstep, config.imgw, config.imgh)
     obj_kind = 1
   else:
     print('wrong value for obj_kind:', obj_kind)
     exit()
   
-  snow(cc, snrad, int(width * height / args.snow), width, height)
+  snow(cc, snrad, int(config.imgw * config.imgh / args.snow), config.imgw, config.imgh)
   
   # convert the workspace to a monochrome 8 bit image
   
   # make an output raster with all pixels decomposed as RGB triplets
   buf = workspace.get_data()
-  rasout = np.ndarray(shape=(height, width, 4), dtype=np.uint8, buffer=buf)
+  rasout = np.ndarray(shape=(config.imgh, config.imgw, 4), dtype=np.uint8, buffer=buf)
   # slice off the unused alpha channel
   rasout = rasout[:, :, :3]
   # convert to mono by flattening the 3D matrix

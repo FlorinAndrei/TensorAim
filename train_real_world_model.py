@@ -4,14 +4,15 @@ import matplotlib.pyplot as plt
 import argparse
 import tensorflow as tf
 from tensorflow import keras
-from pprint import pprint
+
+import config
 
 
 def create_model():
     
     # build the model
     model = keras.Sequential([
-        keras.layers.Conv2D(filters=32, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu', input_shape=(90,120,1)),
+        keras.layers.Conv2D(filters=32, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu', input_shape=(config.imgh,config.imgw,1)),
         keras.layers.Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu'),
         keras.layers.MaxPooling2D(pool_size=(2,2)),
         keras.layers.Dropout(0.25),
@@ -70,9 +71,9 @@ labels = labels[randindex]
 lentotal = len(labels)
 lentrain = int(lentotal * 80 / 100)
 
-images_train = np.empty((lentrain, 90, 120, 1), dtype=np.float32)
+images_train = np.empty((lentrain, config.imgh, config.imgw, 1), dtype=np.float32)
 labels_train = np.empty((lentrain), dtype=np.uint8)
-images_tests = np.empty((lentotal - lentrain, 90, 120, 1), dtype=np.float32)
+images_tests = np.empty((lentotal - lentrain, config.imgh, config.imgw, 1), dtype=np.float32)
 labels_tests = np.empty((lentotal - lentrain), dtype=np.uint8)
 
 images_train = images[:lentrain, :, :, :]
@@ -94,7 +95,7 @@ if args.view:
     plt.xticks([])
     plt.yticks([])
     plt.grid(False)
-    imsample = images_train[i].reshape((90,120,))
+    imsample = images_train[i].reshape((config.imgh,config.imgw,))
     plt.imshow(imsample, 'gray')
     plt.xlabel(labels_train[i])
   plt.show()

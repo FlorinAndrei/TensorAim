@@ -3,7 +3,7 @@ import json
 from PIL import Image
 import h5py
 
-from pprint import pprint
+import config
 
 
 imgdir = 'images'
@@ -14,7 +14,7 @@ jfile = open(imdf, 'r')
 imgdata = json.load(jfile)
 jfile.close()
 
-images = np.empty((len(imgdata), 90, 120, 1), dtype=np.float32)
+images = np.empty((len(imgdata), config.imgh, config.imgw, 1), dtype=np.float32)
 labels = np.empty((len(imgdata)), dtype=np.uint8)
 
 i = 0
@@ -33,7 +33,7 @@ for k,v in imgdata.items():
   imgraster = Image.open(imgfile)
   imgraster.load()
   imgnp = np.asarray(imgraster, dtype=np.float32)
-  imgnp = np.reshape(imgnp, (90, 120, 1))
+  imgnp = np.reshape(imgnp, (config.imgh, config.imgw, 1))
   images[i, :, :, :] = imgnp
   imgraster.close()
 

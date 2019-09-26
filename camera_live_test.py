@@ -6,6 +6,9 @@ import time
 import argparse
 from playsound import playsound
 
+import config
+
+
 parser = argparse.ArgumentParser(description='check the model with live images from camera')
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 parser.add_argument('--model', type=str, help='model to load')
@@ -32,10 +35,10 @@ while(True):
   # grayscale
   gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
   # scale down
-  fframe = cv2.resize(gray, (120, 90), interpolation=cv2.INTER_AREA)
+  fframe = cv2.resize(gray, (config.imgw, config.imgh), interpolation=cv2.INTER_AREA)
   # display
   cv2.imshow('camera', fframe)
-  show2net = fframe.reshape(1, 90, 120, 1) / 255.0
+  show2net = fframe.reshape(1, config.imgh, config.imgw, 1) / 255.0
   p = model.predict(show2net)
   t2 = int(round(time.time() * 1000))
   pred = p[0]

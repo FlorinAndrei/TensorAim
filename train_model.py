@@ -13,33 +13,8 @@ import argparse
 import os
 
 import config
+from model import create_model
 
-def create_model():
-    
-    # build the model
-    model = keras.Sequential([
-        keras.layers.Conv2D(filters=32, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu', input_shape=(config.imgh,config.imgw,1)),
-        keras.layers.Conv2D(filters=64, kernel_size=(3,3), strides=(1,1), padding='same', activation='relu'),
-        keras.layers.MaxPooling2D(pool_size=(2,2)),
-        keras.layers.Dropout(0.25),
-        keras.layers.Flatten(),
-        keras.layers.Dense(units=100, activation='relu'),
-        keras.layers.Dropout(0.5),
-        keras.layers.Dense(units=2, activation='softmax')
-    ])
-    
-    # compile the model
-    model.compile(optimizer='adam',
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
-        
-    """
-    model.compile(loss='categorical_crossentropy', optimizer='adadelta', metrics=['acc'])
-    """
-    
-    print(model.summary())
-    
-    return model
 
 parser = argparse.ArgumentParser(description='train the model')
 parser.add_argument('--epochs', type=int, default=5, help='number of training epochs')

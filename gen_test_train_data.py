@@ -138,7 +138,9 @@ for step in range(setsize):
   # - the coordinates of the center of the target
   # - the whole image
   train_obj = []
-  train_obj.append(obj_kind)
+  obj_kind_arr = np.zeros((2), dtype=np.uint8)
+  obj_kind_arr[obj_kind] = 1
+  train_obj.append(obj_kind_arr)
   train_obj.append([x / config.imgw, y / config.imgh])
   train_obj.append(output)
   # append the object to the training set

@@ -40,18 +40,18 @@ syntot = len(syndata)
 syntrain = int(syntot * 80 / 100)
 
 train_images = np.empty((syntrain, config.imgh, config.imgw, 1), dtype=np.float32)
-train_labels = np.empty((syntrain), dtype=np.uint8)
+train_labels = np.empty((syntrain, 4), dtype=np.float32)
 test_images = np.empty((syntot - syntrain, config.imgh, config.imgw, 1), dtype=np.float32)
-test_labels = np.empty((syntot - syntrain), dtype=np.uint8)
+test_labels = np.empty((syntot - syntrain, 4), dtype=np.float32)
 for i in range(0, syntrain):
     obj = syndata[i]
     train_images[i, :, :] = obj[2]
-    train_labels[i] = obj[0]
+    train_labels[i] = np.concatenate((obj[0], obj[1]))
 for i in range(syntrain, syntot):
     j = i - syntrain
     obj = syndata[i]
     test_images[j, :, :] = obj[2]
-    test_labels[j] = obj[0]
+    test_labels[j] = np.concatenate((obj[0], obj[1]))
 
 # print shape/size for train/test data
 print('\n', 'train/test data size:', train_images.shape, len(train_labels), test_images.shape, len(test_labels), '\n')

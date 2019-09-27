@@ -139,7 +139,7 @@ for step in range(setsize):
   # - the whole image
   train_obj = []
   train_obj.append(obj_kind)
-  train_obj.append([x, y])
+  train_obj.append([x / config.imgw, y / config.imgh])
   train_obj.append(output)
   # append the object to the training set
   # bug with garbage collection makes append() very slow; turn it off

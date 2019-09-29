@@ -15,7 +15,7 @@ def create_model():
     keras.layers.Flatten(),
     keras.layers.Dense(units=100, activation='relu'),
     keras.layers.Dropout(0.5),
-    keras.layers.Dense(units=4, activation='softmax')
+    keras.layers.Dense(units=2, activation='softmax')
   ])
 
   # compile the model

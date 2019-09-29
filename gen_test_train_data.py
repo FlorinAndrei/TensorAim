@@ -141,6 +141,7 @@ for step in range(setsize):
   obj_kind_arr = np.zeros((2), dtype=np.uint8)
   obj_kind_arr[obj_kind] = 1
   train_obj.append(obj_kind_arr)
+  # coordinates require a model that can train for that
   train_obj.append([x / config.imgw, y / config.imgh])
   train_obj.append(output)
   # append the object to the training set

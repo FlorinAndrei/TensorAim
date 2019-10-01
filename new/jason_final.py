@@ -211,7 +211,7 @@ class_threshold = 0.6
 for imfile in imfiles:
   print(imfile)
   # define our new photo
-  photo_filename = args.images + '\\' + imfile
+  photo_filename = os.path.normpath(args.images + '/' + imfile)
   # load and prepare image
   t1 = int(round(time.time() * 1000))
   image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))

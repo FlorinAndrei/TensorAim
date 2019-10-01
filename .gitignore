@@ -6,3 +6,4 @@ logs
 saved_model
 images
 __pycache__
+*.weights

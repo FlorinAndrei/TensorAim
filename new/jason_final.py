@@ -7,7 +7,6 @@ from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 from matplotlib import pyplot
 from matplotlib.patches import Rectangle
-import cv2
 import argparse
 import os
 import time
@@ -141,16 +140,6 @@ def load_image_pixels(filename, shape):
 	image = expand_dims(image, 0)
 	return image, width, height
 
-def load_image_cv(filename, shape):
-  image = cv2.imread(filename)
-  # always remember to swap H and W
-  height, width, bitdepth = image.shape
-  newimage = cv2.resize(image, shape, interpolation=cv2.INTER_AREA)
-  newimage = newimage.astype('float32')
-  newimage /= 255.0
-  newimage = expand_dims(newimage, 0)
-  return newimage, width, height
-
 # get all of the results above a threshold
 def get_boxes(boxes, labels, thresh):
 	v_boxes, v_labels, v_scores = list(), list(), list()
@@ -194,19 +183,8 @@ def draw_boxes(filename, v_boxes, v_labels, v_scores):
 
 parser = argparse.ArgumentParser(description='train the model')
 parser.add_argument('--images', type=str, default='.', help='folder with image files')
-parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 args = parser.parse_args()
 
-if args.defdriver:
-  # use default system driver
-  cap = cv2.VideoCapture(0)
-else:
-  # use DSHOW to get rid of the letterboxed format on some cameras
-  cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-
-# use the smallest available resolution
-ret = cap.set(3,640)
-ret = cap.set(4,480)
 
 # load yolov3 model
 model = load_model('model.h5')
@@ -230,17 +208,15 @@ class_threshold = 0.6
 
 # super-sketchy code, will break if non-images are there
 (_, _, imfiles) = next(os.walk(args.images))
-while True:
+for imfile in imfiles:
+  print(imfile)
   # define our new photo
-  #photo_filename = os.path.normpath(args.images + '/' + imfile)
+  photo_filename = os.path.normpath(args.images + '/' + imfile)
   # load and prepare image
   t1 = int(round(time.time() * 1000))
-  ret, image = cap.read()
-  print(image.shape)
-  exit()
+  image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))
   t2 = int(round(time.time() * 1000))
   imgltime = t2 - t1
-  #print(type(load_image_cv(photo_filename, (input_w, input_h))))
   # make prediction
   t1 = int(round(time.time() * 1000))
   yhat = model.predict(image)

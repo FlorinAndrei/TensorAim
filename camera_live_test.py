@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 import time
 import argparse
-from playsound import playsound
+import pygame
 
 import config
 
@@ -28,6 +28,9 @@ ret = cap.set(4,480)
 model = keras.models.load_model(args.model)
 print(model.summary())
 
+pygame.mixer.init()
+pygame.mixer.music.load('pew.wav')
+
 while(True):
   t1 = int(round(time.time() * 1000))
   # capture frame
@@ -44,7 +47,7 @@ while(True):
   pred = p[0]
   if pred[1] > 0.75:
     beep = '    ############### HUMAN DETECTED! ################'
-    playsound('pew.wav')
+    pygame.mixer.music.play()
   else:
     beep = ''
   print(pred, '\t', int(1000/(t2-t1)), 'fps' + beep)

@@ -279,7 +279,8 @@ while(True):
     print('nothing')
   for i in range(len(v_boxes)):
     vbc = v_boxes[i]
-    print(v_labels[i], v_scores[i], vbc.xmin, vbc.ymin, vbc.xmax, vbc.ymax, '\t', imgltime, '\t', predtime, '\t', boxtime)
+    xmed = int((vbc.xmin + vbc.xmax) / 2)
+    print(v_labels[i], int(v_scores[i]), '\t', xmed, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
   # draw what we found
   draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores, labels, all_colors)
   if cv2.waitKey(1) & 0xFF == ord('q'):

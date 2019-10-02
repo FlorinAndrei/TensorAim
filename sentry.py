@@ -6,8 +6,10 @@ from keras.models import load_model
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 import matplotlib
+matplotlib.use('TKAgg')
 from matplotlib import pyplot
 from matplotlib.patches import Rectangle
+from matplotlib import colors as mcolors
 import argparse
 import cv2
 import os
@@ -167,6 +169,8 @@ def get_boxes(boxes, labels, thresh):
 
 # draw all results
 def draw_boxes(imdata, v_boxes, v_labels, v_scores):
+  global labels
+  global all_colors
   # load the image
   #data = pyplot.imread(filename)
   # plot the image
@@ -182,7 +186,9 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores):
     # calculate width and height of the box
     width, height = x2 - x1, y2 - y1
     # create the shape
-    rect = Rectangle((x1, y1), width, height, fill=False, color='red')
+    label_index = labels.index(v_labels[i])
+    # we have more colors than labels, so this is fine
+    rect = Rectangle((x1, y1), width, height, fill=False, color=all_colors[label_index])
     # draw the box
     ax.add_patch(rect)
     # draw text and score in top left corner
@@ -200,6 +206,8 @@ parser.add_argument('--images', type=str, default='.', help='folder with image f
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 args = parser.parse_args()
 
+# ugly hack, lol
+all_colors = list(dict(mcolors.BASE_COLORS, **mcolors.CSS4_COLORS).keys())
 
 # load yolov3 model
 model = load_model('model.h5')

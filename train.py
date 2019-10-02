@@ -168,8 +168,5 @@ if not os.path.isfile(y3vfile):
 weight_reader = WeightReader(y3vfile)
 # set the model weights into the model
 weight_reader.load_weights(model)
-#model.compile(optimizer='adam',
-#              loss='categorical_crossentropy',
-#              metrics=['accuracy'])
 # save the model to file
 model.save('model.h5')

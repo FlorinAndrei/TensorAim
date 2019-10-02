@@ -168,9 +168,7 @@ def get_boxes(boxes, labels, thresh):
   return v_boxes, v_labels, v_scores
 
 # draw all results
-def draw_boxes(imdata, v_boxes, v_labels, v_scores):
-  global labels
-  global all_colors
+def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels, all_colors):
   # load the image
   #data = pyplot.imread(filename)
   # plot the image
@@ -283,6 +281,6 @@ while(True):
     vbc = v_boxes[i]
     print(v_labels[i], v_scores[i], vbc.xmin, vbc.ymin, vbc.xmax, vbc.ymax, '\t', imgltime, '\t', predtime, '\t', boxtime)
   # draw what we found
-  draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores)
+  draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores, labels, all_colors)
   if cv2.waitKey(1) & 0xFF == ord('q'):
     break

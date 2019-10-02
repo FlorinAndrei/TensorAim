@@ -278,7 +278,7 @@ while(True):
   if len(v_boxes) > 0:
     for i in range(len(v_boxes)):
       vbc = v_boxes[i]
-      xmed = int((vbc.xmin + vbc.xmax) / 2)
+      xmed = round((vbc.xmin + vbc.xmax) / 2)
       print(v_labels[i], int(v_scores[i]), '\t', xmed, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
   else:
     print('nothing')

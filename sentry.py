@@ -275,12 +275,13 @@ while(True):
   t2 = int(round(time.time() * 1000))
   boxtime = t2 - t1
   # summarize what we found
-  if len(v_boxes) == 0:
+  if len(v_boxes) > 0:
+    for i in range(len(v_boxes)):
+      vbc = v_boxes[i]
+      xmed = int((vbc.xmin + vbc.xmax) / 2)
+      print(v_labels[i], int(v_scores[i]), '\t', xmed, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
+  else:
     print('nothing')
-  for i in range(len(v_boxes)):
-    vbc = v_boxes[i]
-    xmed = int((vbc.xmin + vbc.xmax) / 2)
-    print(v_labels[i], int(v_scores[i]), '\t', xmed, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
   # draw what we found
   draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores, labels, all_colors)
   if cv2.waitKey(1) & 0xFF == ord('q'):

@@ -279,7 +279,8 @@ while(True):
     for i in range(len(v_boxes)):
       vbc = v_boxes[i]
       xmed = round((vbc.xmin + vbc.xmax) / 2)
-      print(v_labels[i], int(v_scores[i]), '\t', xmed, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
+      # rounding numpy floats is weird
+      print(v_labels[i], int(round(v_scores[i])), '\t', xmed, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
   else:
     print('nothing')
   # draw what we found

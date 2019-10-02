@@ -5,9 +5,11 @@ from numpy import expand_dims
 from keras.models import load_model
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
+import matplotlib
 from matplotlib import pyplot
 from matplotlib.patches import Rectangle
 import argparse
+import cv2
 import os
 import time
 from pprint import pprint
@@ -63,7 +65,7 @@ def decode_netout(netout, anchors, obj_thresh, net_h, net_w):
 		for b in range(nb_box):
 			# 4th element is objectness score
 			objectness = netout[int(row)][int(col)][b][4]
-			if(objectness.all() <= obj_thresh): continue
+			if(objectness <= obj_thresh).all(): continue
 			# first 4 elements are x, y, w, and h
 			x, y, w, h = netout[int(row)][int(col)][b][:4]
 			x = (col + x) / grid_w # center position, unit: image width
@@ -140,6 +142,14 @@ def load_image_pixels(filename, shape):
 	image = expand_dims(image, 0)
 	return image, width, height
 
+def load_image_cv(image, shape):
+  width, height = image.shape[1], image.shape[0]
+  image = cv2.resize(image, shape)
+  image = image.astype('float32')
+  image /= 255.0
+  image = expand_dims(image, 0)
+  return image, width, height
+
 # get all of the results above a threshold
 def get_boxes(boxes, labels, thresh):
 	v_boxes, v_labels, v_scores = list(), list(), list()
@@ -156,11 +166,11 @@ def get_boxes(boxes, labels, thresh):
 	return v_boxes, v_labels, v_scores
 
 # draw all results
-def draw_boxes(filename, v_boxes, v_labels, v_scores):
+def draw_boxes(imdata, v_boxes, v_labels, v_scores):
 	# load the image
-	data = pyplot.imread(filename)
+	#data = pyplot.imread(filename)
 	# plot the image
-	pyplot.imshow(data)
+	fig = pyplot.imshow(imdata)
 	# get the context for drawing boxes
 	ax = pyplot.gca()
 	# plot each box
@@ -176,13 +186,13 @@ def draw_boxes(filename, v_boxes, v_labels, v_scores):
 		ax.add_patch(rect)
 		# draw text and score in top left corner
 		label = "%s (%.3f)" % (v_labels[i], v_scores[i])
-		pyplot.text(x1, y1, label, color='white')
-	# show the plot
+		ax.text(x1, y1, label, color='white')
 	pyplot.show()
 
 
 parser = argparse.ArgumentParser(description='train the model')
 parser.add_argument('--images', type=str, default='.', help='folder with image files')
+parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 args = parser.parse_args()
 
 
@@ -206,36 +216,58 @@ anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33
 # define the probability threshold for detected objects
 class_threshold = 0.6
 
+if args.defdriver:
+  # use default system driver
+  cap = cv2.VideoCapture(0)
+else:
+  # use DSHOW to get rid of the letterboxed format on some cameras
+  cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+# use the smallest available resolution
+ret = cap.set(3,640)
+ret = cap.set(4,480)
+
 # super-sketchy code, will break if non-images are there
 (_, _, imfiles) = next(os.walk(args.images))
-for imfile in imfiles:
-  print(imfile)
+#for imfile in imfiles:
+while(True):
+  #print(imfile)
   # define our new photo
-  photo_filename = os.path.normpath(args.images + '/' + imfile)
+  #photo_filename = os.path.normpath(args.images + '/' + imfile)
   # load and prepare image
   t1 = int(round(time.time() * 1000))
-  image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))
+  #image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))
+  _, cvimage = cap.read()
+  image, image_w, image_h = load_image_cv(cvimage[...,::-1], (input_w, input_h))
+  #print(image.shape, cvimage.shape)
   t2 = int(round(time.time() * 1000))
   imgltime = t2 - t1
   # make prediction
   t1 = int(round(time.time() * 1000))
   yhat = model.predict(image)
   t2 = int(round(time.time() * 1000))
+  predtime = t2 - t1
   # summarize the shape of the list of arrays
   #print([a.shape for a in yhat])
+  t1 = int(round(time.time() * 1000))
   boxes = list()
   for i in range(len(yhat)):
     # decode the output of the network
     boxes += decode_netout(yhat[i][0], anchors[i], class_threshold, input_h, input_w)
-  # correct the sizes of the bounding boxes for the shape of the image
-  correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w)
   # suppress non-maximal boxes
   do_nms(boxes, 0.5)
+  # correct the sizes of the bounding boxes for the shape of the image
+  correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w)
   # get the details of the detected objects
   v_boxes, v_labels, v_scores = get_boxes(boxes, labels, class_threshold)
+  t2 = int(round(time.time() * 1000))
+  boxtime = t2 - t1
   # summarize what we found
+  if len(v_boxes) == 0:
+    print('nothing')
   for i in range(len(v_boxes)):
     vbc = v_boxes[i]
-    print(v_labels[i], v_scores[i], vbc.xmin, vbc.ymin, vbc.xmax, vbc.ymax, '\t', int(1000/(t2-t1)), 'fps', '\t', imgltime, 'ms')
+    print(v_labels[i], v_scores[i], vbc.xmin, vbc.ymin, vbc.xmax, vbc.ymax, '\t', imgltime, '\t', predtime, '\t', boxtime)
   # draw what we found
-  draw_boxes(photo_filename, v_boxes, v_labels, v_scores)
+  print(cvimage.shape)
+  draw_boxes(cvimage[...,::-1], v_boxes, v_labels, v_scores)

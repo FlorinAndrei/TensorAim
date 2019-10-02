@@ -170,7 +170,8 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores):
 	# load the image
 	#data = pyplot.imread(filename)
 	# plot the image
-	fig = pyplot.imshow(imdata)
+	fig, ax = pyplot.subplots()
+	ax = pyplot.imshow(imdata)
 	# get the context for drawing boxes
 	ax = pyplot.gca()
 	# plot each box
@@ -181,13 +182,17 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores):
 		# calculate width and height of the box
 		width, height = x2 - x1, y2 - y1
 		# create the shape
-		rect = Rectangle((x1, y1), width, height, fill=False, color='white')
+		rect = Rectangle((x1, y1), width, height, fill=False, color='red')
 		# draw the box
 		ax.add_patch(rect)
 		# draw text and score in top left corner
 		label = "%s (%.3f)" % (v_labels[i], v_scores[i])
-		ax.text(x1, y1, label, color='white')
-	pyplot.show()
+		ax.text(x1, y1, label, color='white', bbox=dict(facecolor='blue', alpha=0.3))
+	fig.canvas.draw()
+	#pyplot.show()
+	annotated = np.array(fig.canvas.renderer.buffer_rgba(), dtype=np.uint8)
+	pyplot.close('all')
+	cv2.imshow('camera', cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB))
 
 
 parser = argparse.ArgumentParser(description='train the model')
@@ -238,7 +243,8 @@ while(True):
   t1 = int(round(time.time() * 1000))
   #image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))
   _, cvimage = cap.read()
-  image, image_w, image_h = load_image_cv(cvimage[...,::-1], (input_w, input_h))
+  cvRGBimage = cvimage[...,::-1]
+  image, image_w, image_h = load_image_cv(cvRGBimage, (input_w, input_h))
   #print(image.shape, cvimage.shape)
   t2 = int(round(time.time() * 1000))
   imgltime = t2 - t1
@@ -269,5 +275,6 @@ while(True):
     vbc = v_boxes[i]
     print(v_labels[i], v_scores[i], vbc.xmin, vbc.ymin, vbc.xmax, vbc.ymax, '\t', imgltime, '\t', predtime, '\t', boxtime)
   # draw what we found
-  print(cvimage.shape)
-  draw_boxes(cvimage[...,::-1], v_boxes, v_labels, v_scores)
+  draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores)
+  if cv2.waitKey(1) & 0xFF == ord('q'):
+    break

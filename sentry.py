@@ -15,6 +15,7 @@ import cv2
 import os
 import time
 import maestro
+import pygame
 from pprint import pprint
 
 # fix issue: "Could not create cudnn handle"
@@ -222,6 +223,9 @@ except:
 if has_servo:
   servo.setTarget(servoOut, servoX)
 
+pygame.mixer.init()
+pygame.mixer.music.load('pew.wav')
+
 # ugly hack, lol
 all_colors = list(dict(mcolors.BASE_COLORS, **mcolors.CSS4_COLORS).keys())
 
@@ -304,6 +308,7 @@ while(True):
         servoX = round(servoMin + 0.75 * (servoMax - servoMin) * (cam_w - xmed) / cam_w)
         if has_servo:
           servo.setTarget(servoOut, servoX)
+        pygame.mixer.music.play()
         # only track the first person in current frame
         found_person = True
       # rounding numpy floats is weird

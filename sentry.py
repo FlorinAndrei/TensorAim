@@ -304,7 +304,7 @@ while(True):
     for i in range(len(v_boxes)):
       vbc = v_boxes[i]
       xmed = round((vbc.xmin + vbc.xmax) / 2)
-      if not found_person:
+      if not found_person and v_labels[i] == 'person':
         servoX = round(servoMin + 0.75 * (servoMax - servoMin) * (cam_w - xmed) / cam_w)
         if has_servo:
           servo.setTarget(servoOut, servoX)

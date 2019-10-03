@@ -14,6 +14,7 @@ import argparse
 import cv2
 import os
 import time
+import maestro
 from pprint import pprint
 
 # fix issue: "Could not create cudnn handle"
@@ -204,8 +205,25 @@ parser.add_argument('--images', type=str, default='.', help='folder with image f
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 args = parser.parse_args()
 
+serport = 'COM3'
+servoOut = 0
+servoMin = 4000
+servoMax = 8000
+# default position
+servoX = round((servoMin + servoMax) / 2)
+
+try:
+  servo = maestro.Controller(serport)
+except:
+  print('Could not connect to controller on port', serport)
+  exit(1)
+
+servo.setTarget(servoOut, servoX)
+
 # ugly hack, lol
 all_colors = list(dict(mcolors.BASE_COLORS, **mcolors.CSS4_COLORS).keys())
+
+cam_w, cam_h = 640, 480
 
 # load yolov3 model
 model = load_model('model.h5')
@@ -235,8 +253,8 @@ else:
   cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # use the smallest available resolution
-ret = cap.set(3,640)
-ret = cap.set(4,480)
+ret = cap.set(3,cam_w)
+ret = cap.set(4,cam_h)
 
 # super-sketchy code, will break if non-images are there
 (_, _, imfiles) = next(os.walk(args.images))
@@ -276,11 +294,17 @@ while(True):
   boxtime = t2 - t1
   # summarize what we found
   if len(v_boxes) > 0:
+    found_person = False
     for i in range(len(v_boxes)):
       vbc = v_boxes[i]
       xmed = round((vbc.xmin + vbc.xmax) / 2)
+      if not found_person:
+        servoX = round(servoMin + 0.75 * (servoMax - servoMin) * (cam_w - xmed) / cam_w)
+        servo.setTarget(servoOut, servoX)
+        # only track the first person in current frame
+        found_person = True
       # rounding numpy floats is weird
-      print(v_labels[i], int(round(v_scores[i])), '\t', xmed, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
+      print(v_labels[i], int(round(v_scores[i])), '\t', servoX, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
   else:
     print('nothing')
   # draw what we found

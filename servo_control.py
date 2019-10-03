@@ -1,7 +1,13 @@
 import maestro
 import time
 
-servo = maestro.Controller('COM3')
+serport = 'COM3'
+
+try:
+  servo = maestro.Controller(serport)
+except:
+  print('Could not connect to controller on port', serport)
+  exit(1)
 
 while True:
   servo.setTarget(0, 4000)

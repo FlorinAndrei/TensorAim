@@ -212,13 +212,15 @@ servoMax = 8000
 # default position
 servoX = round((servoMin + servoMax) / 2)
 
+has_servo = True
 try:
   servo = maestro.Controller(serport)
 except:
   print('Could not connect to controller on port', serport)
-  exit(1)
+  has_servo = False
 
-servo.setTarget(servoOut, servoX)
+if has_servo:
+  servo.setTarget(servoOut, servoX)
 
 # ugly hack, lol
 all_colors = list(dict(mcolors.BASE_COLORS, **mcolors.CSS4_COLORS).keys())
@@ -300,7 +302,8 @@ while(True):
       xmed = round((vbc.xmin + vbc.xmax) / 2)
       if not found_person:
         servoX = round(servoMin + 0.75 * (servoMax - servoMin) * (cam_w - xmed) / cam_w)
-        servo.setTarget(servoOut, servoX)
+        if has_servo:
+          servo.setTarget(servoOut, servoX)
         # only track the first person in current frame
         found_person = True
       # rounding numpy floats is weird

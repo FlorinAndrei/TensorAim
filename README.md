@@ -14,9 +14,11 @@ ymin-ymax could be used to aim vertically, but building the full gimbal takes mo
 
 ## Current status
 
-TensorAim can now detect humans in a live video stream. It can also determine xmin/xmax. Ready to connect to servo for aiming.
+Target detection, aiming with servo - ready.
 
 ## Previous status updates (newest to oldest)
+
+TensorAim can now detect humans in a live video stream. It can also determine xmin/xmax. Ready to connect to servo for aiming.
 
 TensorFlow on Raspberry Pi is broken. Not going to fly a drone for now - let's run it on a laptop. Waiting for TF 2.0, hopefully it gets better.
 

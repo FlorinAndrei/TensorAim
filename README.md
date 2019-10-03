@@ -14,7 +14,7 @@ ymin-ymax could be used to aim vertically, but building the full gimbal takes mo
 
 ## Current status
 
-Target detection, aiming with servo - ready.
+Target detection, aiming with servo - ready for testing with laser.
 
 ## Previous status updates (newest to oldest)
 

@@ -170,7 +170,7 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels):
     width, height = x2 - x1, y2 - y1
     # create the shape
     label_index = labels.index(v_labels[i])
-    label = "%s (%.3f)" % (v_labels[i], v_scores[i])
+    label = "%s (%d)" % (v_labels[i], round(v_scores[i]))
     objcolor = list(ImageColor.colormap.keys())[label_index]
     draw.rectangle((x1, y1, x1 + width, y1 + height), fill=None, outline=objcolor, width=1)
     draw.text((x1, y1), label, fill=objcolor)

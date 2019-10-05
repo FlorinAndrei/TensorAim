@@ -127,21 +127,6 @@ def do_nms(boxes, nms_thresh):
         if bbox_iou(boxes[index_i], boxes[index_j]) >= nms_thresh:
           boxes[index_j].classes[c] = 0
 
-# load and prepare an image
-def load_image_pixels(filename, shape):
-  # load the image to get its shape
-  image = load_img(filename)
-  width, height = image.size
-  # load the image with the required size
-  image = load_img(filename, target_size=shape)
-  # convert to numpy array
-  image = img_to_array(image)
-  # scale pixel values to [0, 1]
-  image = image.astype('float32')
-  image /= 255.0
-  # add a dimension so that we have one sample
-  image = expand_dims(image, 0)
-  return image, width, height
 
 def load_image_cv(image, shape):
   width, height = image.shape[1], image.shape[0]
@@ -244,20 +229,12 @@ else:
 ret = cap.set(3,cam_w)
 ret = cap.set(4,cam_h)
 
-# super-sketchy code, will break if non-images are there
-(_, _, imfiles) = next(os.walk(args.images))
-#for imfile in imfiles:
 while(True):
-  #print(imfile)
-  # define our new photo
-  #photo_filename = os.path.normpath(args.images + '/' + imfile)
   # load and prepare image
   t1 = int(round(time.time() * 1000))
-  #image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))
   _, cvimage = cap.read()
   cvRGBimage = cvimage[...,::-1]
   image, image_w, image_h = load_image_cv(cvRGBimage, (input_w, input_h))
-  #print(image.shape, cvimage.shape)
   t2 = int(round(time.time() * 1000))
   imgltime = t2 - t1
   # make prediction
@@ -265,8 +242,6 @@ while(True):
   yhat = model.predict(image)
   t2 = int(round(time.time() * 1000))
   predtime = t2 - t1
-  # summarize the shape of the list of arrays
-  #print([a.shape for a in yhat])
   t1 = int(round(time.time() * 1000))
   boxes = list()
   for i in range(len(yhat)):

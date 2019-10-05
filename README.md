@@ -27,6 +27,10 @@ The interface between servo and computer is provided by the [Pololu Mini Maestro
 
 Power for the servo is provided, as is standard with R/C, by a LiPo battery via an ESC BEC.
 
+Here's an image of the hardware:
+
+![hardware](https://raw.githubusercontent.com/FlorinAndrei/TensorAim/master/docs/hw_photo.jpg)
+
 ## Current status
 
 Target detection, aiming with servo - ready for testing with laser.

@@ -75,7 +75,7 @@ Here's an image of the hardware:
 
 The system is based on the YOLOv3 model by [Joseph Redmon](https://pjreddie.com/).
 
-YOLO output parsing code was borrowed from [Huynh Ngoc Anh a.k.a. experiencor](https://github.com/experiencor).
+YOLO encapsulation and output parsing code was borrowed from [Huynh Ngoc Anh a.k.a. experiencor](https://github.com/experiencor).
 
 Hardware for the laser mount was designed and built by Victor Andrei.
 

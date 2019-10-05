@@ -21,7 +21,7 @@ The software can control a servo mechanism in real time, via standard PWM protoc
 
 ### Neural network
 
-This project is based on the [YOLOv3](https://arxiv.org/abs/1804.02767) network. It's a deep convolutional network that performs multiple object detection and classification, along with estimating coordinates, by looking at the whole image at once. The objectness score for each bounding box is done via logistic regression using dimension clusters as anchor boxes.
+This project is based on the [YOLOv3](https://arxiv.org/abs/1804.02767) network. It's a deep convolutional network that performs multiple-object detection and classification, along with estimating coordinates, by looking at the whole image at once. The objectness score for each bounding box is done via logistic regression using dimension clusters as anchor boxes.
 
 To detect multiple objects and estimate bounding boxes for them, YOLO is faster than other approaches, such as R-CNN. Unlike R-CNN, it uses a single network to look at the whole field. It's extremely fast, while remaining accurate enough. Real time object tracking at video frame rates is doable with YOLO on consumer hardware.
 

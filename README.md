@@ -41,7 +41,7 @@ Running YOLO on the CPU is doable but very slow. The GPU-accelerated version of 
 
 We use [OpenCV](https://opencv.org/) to get a video stream from the camera and inject it into the neural network, and also to get the annotated image with bounding boxes provided by the network and display it in real time on the computer. It's fast, easy, and standard.
 
-The image processing pipeline uses [Numpy](https://numpy.org/) arrays to store images. Image transformations are done with both OpenCV (video-related stuff) and Numpy (linear algebra), as appropriate; both libraries are highly optimized for their respective domains.
+The image processing pipeline uses [Numpy](https://numpy.org/) arrays to store images. Image transformations are done with both OpenCV (video-related tasks) and Numpy (linear algebra), as appropriate; both libraries are highly optimized for their respective domains.
 
 ### A point about graphics
 
@@ -49,7 +49,7 @@ To draw bounding boxes and label them, [Matplotlib](https://matplotlib.org/) is 
 
 [Pillow](https://python-pillow.org/) is a better fit here. Much simpler API, the Numpy interface could not be more intuitive, and it's probably a bit faster too, I guess.
 
-Use the right tool for the job, folks!
+Use the right tool for the job.
 
 ### Communication with hardware
 

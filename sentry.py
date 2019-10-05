@@ -239,12 +239,9 @@ ret = cap.set(4,cam_h)
 
 while(True):
   # load and prepare image
-  t1 = int(round(time.time() * 1000))
   _, cvimage = cap.read()
   cvRGBimage = cvimage[...,::-1]
   image, image_w, image_h = load_image_cv(cvRGBimage, (input_w, input_h))
-  t2 = int(round(time.time() * 1000))
-  imgltime = t2 - t1
   # make prediction
   t1 = int(round(time.time() * 1000))
   yhat = model.predict(image)
@@ -277,7 +274,7 @@ while(True):
         # only track the first person in current frame
         found_person = True
       # rounding numpy floats is weird
-      print(v_labels[i], int(round(v_scores[i])), '\t', servoX, '\timld:', imgltime, '\tpred:', predtime, '\tbox:', boxtime)
+      print(v_labels[i], int(round(v_scores[i])), '\t', servoX, '\tpred:', predtime, '\tbox:', boxtime)
   else:
     print('nothing')
   # draw what we found

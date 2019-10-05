@@ -13,7 +13,7 @@ Target detection, aiming with servo - ready for testing with laser.
 
 ## Technology
 
-Python throughout the project.
+Python throughout the project. Keras and TensorFlow.
 
 The `sentry.py` file instantiates a deep neural network, feeds the network live images from a camera, parses the output, and estimates the locations of the detected objects (if any).
 

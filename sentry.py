@@ -175,7 +175,7 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels):
     draw.rectangle((x1, y1, x1 + width, y1 + height), fill=None, outline=objcolor, width=1)
     draw.text((x1, y1), label, fill=objcolor)
   im4cv2 = cv2.cvtColor(np.array(pilim), cv2.COLOR_BGR2RGB)
-  im4cv2big = cv2.resize(im4cv2, None, fx = 1.5, fy =1.5)
+  im4cv2big = cv2.resize(im4cv2, None, fx = 1.7, fy =1.7)
   cv2.imshow('camera', im4cv2big)
 
 

@@ -46,8 +46,10 @@ class BoundBox:
 
     return self.score
 
+
 def _sigmoid(x):
   return 1. / (1. + np.exp(-x))
+
 
 def decode_netout(netout, anchors, obj_thresh, net_h, net_w):
   grid_h, grid_w = netout.shape[:2]
@@ -79,6 +81,7 @@ def decode_netout(netout, anchors, obj_thresh, net_h, net_w):
       boxes.append(box)
   return boxes
 
+
 def correct_yolo_boxes(boxes, image_h, image_w, net_h, net_w):
   new_w, new_h = net_w, net_h
   for i in range(len(boxes)):
@@ -88,6 +91,7 @@ def correct_yolo_boxes(boxes, image_h, image_w, net_h, net_w):
     boxes[i].xmax = int((boxes[i].xmax - x_offset) / x_scale * image_w)
     boxes[i].ymin = int((boxes[i].ymin - y_offset) / y_scale * image_h)
     boxes[i].ymax = int((boxes[i].ymax - y_offset) / y_scale * image_h)
+
 
 def _interval_overlap(interval_a, interval_b):
   x1, x2 = interval_a
@@ -103,6 +107,7 @@ def _interval_overlap(interval_a, interval_b):
     else:
       return min(x2,x4) - x3
 
+
 def bbox_iou(box1, box2):
   intersect_w = _interval_overlap([box1.xmin, box1.xmax], [box2.xmin, box2.xmax])
   intersect_h = _interval_overlap([box1.ymin, box1.ymax], [box2.ymin, box2.ymax])
@@ -111,6 +116,7 @@ def bbox_iou(box1, box2):
   w2, h2 = box2.xmax-box2.xmin, box2.ymax-box2.ymin
   union = w1*h1 + w2*h2 - intersect
   return float(intersect) / union
+
 
 def do_nms(boxes, nms_thresh):
   if len(boxes) > 0:
@@ -136,6 +142,7 @@ def load_image_cv(image, shape):
   image = expand_dims(image, 0)
   return image, width, height
 
+
 # get all of the results above a threshold
 def get_boxes(boxes, labels, thresh):
   v_boxes, v_labels, v_scores = list(), list(), list()
@@ -150,6 +157,7 @@ def get_boxes(boxes, labels, thresh):
         v_scores.append(box.classes[i]*100)
         # don't break, many labels may trigger for one box
   return v_boxes, v_labels, v_scores
+
 
 def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels):
   pilim = Image.fromarray(imdata)

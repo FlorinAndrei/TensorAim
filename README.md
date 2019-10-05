@@ -15,13 +15,13 @@ Target detection, aiming with servo - ready for testing with laser.
 
 Python throughout the project. Keras and TensorFlow.
 
-The `sentry.py` file instantiates a deep neural network, feeds the network live images from a camera, parses the output, and estimates the locations of the detected objects (if any).
+The `sentry.py` file (the central part of the project) instantiates a deep neural network, feeds the network live images from a camera, parses the output, and estimates the locations of the detected objects (if any).
 
 The model can provide 2D coordinates (X/Y) for the objects; `sentry.py` uses that to draw bounding boxes around the objects. Currently only the X coordinate (horizontal plane) is passed beyond the software realm into the hardware; 2D control (X/Y) would be doable, but that's for a future version.
 
 The software can control a servo mechanism in real time, via standard PWM protocols, to point a laser at the objects that are detected and localized. Currently the X coordinate from object detection is used to swivel the laser left-right.
 
-`train.py` parses the YOLOv3 weights and compiles them into a format compatible with TensorFlow / Keras.
+`train.py` parses the YOLOv3 weights and compiles them into a format compatible with TensorFlow / Keras, which is then used by `sentry.py`.
 
 ### Neural network
 

@@ -25,6 +25,8 @@ The laser sits on top of a [Hextronik HXT900](https://servodatabase.com/servo/he
 
 The interface between servo and computer is provided by the [Pololu Mini Maestro 12-Channel](https://www.pololu.com/product/1352) USB servo controller. The controller has 12 outputs and can control up to 12 independent servos. Each output speaks the PWM protocol typically used by R/C gear. The controller input is USB/serial and is plugged into the computer.
 
+Power for the servo is provided, as is standard with R/C, by a LiPo battery via an ESC BEC.
+
 ## Current status
 
 Target detection, aiming with servo - ready for testing with laser.

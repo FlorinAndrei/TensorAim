@@ -7,6 +7,10 @@ The system needs to do two things:
 
 With that, action can be taken in the real world. E.g., pick one object category and literally point it out - paint a dot on them with a laser, for example.
 
+## Current status
+
+Target detection, aiming with servo - ready for testing with laser.
+
 ## Technology
 
 Python throughout the project.
@@ -60,10 +64,6 @@ Power for the servo is provided, as is standard with R/C, by a LiPo battery via 
 Here's an image of the hardware:
 
 ![hardware](https://raw.githubusercontent.com/FlorinAndrei/TensorAim/master/docs/hw_photo.jpg)
-
-## Current status
-
-Target detection, aiming with servo - ready for testing with laser.
 
 ## Credits
 

@@ -35,7 +35,7 @@ Here's the arXiv paper describing YOLOv3:
 
 The network is quite accurate both on static data, such as the [COCO database](http://cocodataset.org/), and on live video in the real world.
 
-Running YOLO on the CPU is doable but very slow. The GPU-accelerated version of TensorFlow 1.x is much faster. On a portable, scaled down Turing-class GPU (GTX 1660 Ti) with 6 GB RAM I get up to 20 fps from the neural network alone - which is then reduced to half by the code after output parsing, display, etc (I'm sure there's a lot of optimizations yet to be done).
+Running YOLO on the CPU is doable but very slow. The GPU-accelerated version of TensorFlow 1.x is much faster. On a portable, scaled down Turing-class GPU (GTX 1660 Ti) with 6 GB RAM I get up to 20 fps from the neural network alone - which is then reduced to half by the code after output parsing, display, etc (I'm sure there's a lot of optimizations yet to be done - e.g. replace loops with vector operations).
 
 ### Video interface
 

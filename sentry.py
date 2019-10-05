@@ -274,7 +274,7 @@ while(True):
         # only track the first person in current frame
         found_person = True
       # rounding numpy floats is weird
-      print(v_labels[i], int(round(v_scores[i])), '\t', servoX, '\tpred:', predtime, '\tbox:', boxtime)
+      print(v_labels[i], int(round(v_scores[i])), '\t', servoX, '\tpred:', predtime, 'ms\tbox:', boxtime, 'ms')
   else:
     print('nothing')
   # draw what we found

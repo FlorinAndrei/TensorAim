@@ -5,11 +5,7 @@ from numpy import expand_dims
 from keras.models import load_model
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
-import matplotlib
-matplotlib.use('TKAgg')
-from matplotlib import pyplot
-from matplotlib.patches import Rectangle
-from matplotlib import colors as mcolors
+from PIL import Image, ImageDraw, ImageColor
 import argparse
 import cv2
 import os
@@ -17,6 +13,7 @@ import time
 import maestro
 import pygame
 from pprint import pprint
+
 
 # fix issue: "Could not create cudnn handle"
 from tensorflow.compat.v1 import ConfigProto
@@ -169,16 +166,9 @@ def get_boxes(boxes, labels, thresh):
         # don't break, many labels may trigger for one box
   return v_boxes, v_labels, v_scores
 
-# draw all results
-def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels, all_colors):
-  # load the image
-  #data = pyplot.imread(filename)
-  # plot the image
-  fig, ax = pyplot.subplots()
-  ax = pyplot.imshow(imdata)
-  # get the context for drawing boxes
-  ax = pyplot.gca()
-  # plot each box
+def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels):
+  pilim = Image.fromarray(imdata)
+  draw = ImageDraw.Draw(pilim)
   for i in range(len(v_boxes)):
     box = v_boxes[i]
     # get coordinates
@@ -187,18 +177,13 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels, all_colors):
     width, height = x2 - x1, y2 - y1
     # create the shape
     label_index = labels.index(v_labels[i])
-    # we have more colors than labels, so this is fine
-    rect = Rectangle((x1, y1), width, height, fill=False, color=all_colors[label_index])
-    # draw the box
-    ax.add_patch(rect)
-    # draw text and score in top left corner
     label = "%s (%.3f)" % (v_labels[i], v_scores[i])
-    ax.text(x1, y1, label, color='white', bbox=dict(facecolor='blue', alpha=0.3))
-  fig.canvas.draw()
-  #pyplot.show()
-  annotated = np.array(fig.canvas.renderer.buffer_rgba(), dtype=np.uint8)
-  pyplot.close('all')
-  cv2.imshow('camera', cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB))
+    objcolor = list(ImageColor.colormap.keys())[label_index]
+    draw.rectangle((x1, y1, x1 + width, y1 + height), fill=None, outline=objcolor, width=1)
+    draw.text((x1, y1), label, fill=objcolor)
+  im4cv2 = cv2.cvtColor(np.array(pilim), cv2.COLOR_BGR2RGB)
+  im4cv2big = cv2.resize(im4cv2, None, fx = 1.5, fy =1.5)
+  cv2.imshow('camera', im4cv2big)
 
 
 parser = argparse.ArgumentParser(description='train the model')
@@ -225,9 +210,6 @@ if has_servo:
 
 pygame.mixer.init()
 pygame.mixer.music.load('pew.wav')
-
-# ugly hack, lol
-all_colors = list(dict(mcolors.BASE_COLORS, **mcolors.CSS4_COLORS).keys())
 
 cam_w, cam_h = 640, 480
 
@@ -316,6 +298,6 @@ while(True):
   else:
     print('nothing')
   # draw what we found
-  draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores, labels, all_colors)
+  draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores, labels)
   if cv2.waitKey(1) & 0xFF == ord('q'):
     break

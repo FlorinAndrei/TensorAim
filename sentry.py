@@ -10,6 +10,7 @@ import maestro
 import pygame
 
 # fix issue: "Could not create cudnn handle"
+# may not be needed on all systems
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
 config = ConfigProto()

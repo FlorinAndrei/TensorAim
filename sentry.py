@@ -234,6 +234,7 @@ anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33
 # define the probability threshold for detected objects
 class_threshold = 0.6
 
+# no need to capture in hi-def if the model can't do that
 cam_w, cam_h = 640, 480
 if args.defdriver:
   # use default system driver

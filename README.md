@@ -45,7 +45,7 @@ The image processing pipeline uses [Numpy](https://numpy.org/) arrays to store i
 
 ### A point about graphics
 
-To draw bounding boxes and label them, [Matplotlib](https://matplotlib.org/) is the go-to library for many. It sure is powerful, and it's very popular, but in this case it's like cracking peanuts with the 100 ton fully automated hydraulic press, when a simple hammer would suffice. Interfacing Matplotlib with Numpy (two-way interface) is obscure, counter-intuitive, and poorly documented.
+To draw bounding boxes and label them, [Matplotlib](https://matplotlib.org/) is the go-to library for many. It sure is powerful, and it's very popular, but in this case it's like cracking walnuts with the 100 ton fully automated hydraulic press, when a simple hammer would suffice. Interfacing Matplotlib with Numpy (two-way interface) is obscure, counter-intuitive, and poorly documented.
 
 [Pillow](https://python-pillow.org/) is a better fit here. Much simpler API, the Numpy interface could not be more intuitive, and it's probably a bit faster too, I guess.
 

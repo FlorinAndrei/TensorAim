@@ -181,15 +181,17 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels):
 
 servoMin = 4000
 servoMax = 8000
+servoMed = round((servoMin + servoMax) / 2)
 
 parser = argparse.ArgumentParser(description='train the model')
+parser.add_argument('--center', type=int, default=servoMed, help='servo initial center, to correct servo/camera offset, between ' + str(servoMin) + ' and ' + str(servoMax) + ', default=' + str(servoMed))
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 args = parser.parse_args()
 
 serport = 'COM3'
 servoOut = 0
 # default position
-servoX = round((servoMin + servoMax) / 2)
+servoX = args.center
 
 has_servo = True
 try:
@@ -267,7 +269,11 @@ while(True):
       vbc = v_boxes[i]
       xmed = round((vbc.xmin + vbc.xmax) / 2)
       if not found_person and v_labels[i] == 'person':
-        servoX = round(servoMin + 0.75 * (servoMax - servoMin) * (cam_w - xmed) / cam_w)
+        servoX = round(servoMin + (args.center - servoMed) + 0.75 * (servoMax - servoMin) * (cam_w - xmed) / cam_w)
+        if servoX < servoMin:
+          servoX = servoMin
+        if servoX > servoMax:
+          servoX = servoMax
         if has_servo:
           servo.setTarget(servoOut, servoX)
         pygame.mixer.music.play()

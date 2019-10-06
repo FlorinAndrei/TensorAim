@@ -185,7 +185,7 @@ servoMed = round((servoMin + servoMax) / 2)
 
 parser = argparse.ArgumentParser(description='train the model')
 parser.add_argument('--center', type=int, default=servoMed, help='servo initial center, to correct servo/camera offset, between ' + str(servoMin) + ' and ' + str(servoMax) + ', default=' + str(servoMed))
-parser.add_argument('--amplix', type=float, default=0.75, help='motion amplitude on X; depends on camera angle and servo; default=0.75')
+parser.add_argument('--amplix', type=float, default=0.7, help='motion amplitude on X; depends on camera angle and servo; default=0.7')
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 args = parser.parse_args()
 
@@ -270,7 +270,7 @@ while(True):
       vbc = v_boxes[i]
       xmed = round((vbc.xmin + vbc.xmax) / 2)
       if not found_person and v_labels[i] == 'person':
-        servoX = round(args.center + args.amplix * (servoMax - servoMed) * (xmed - cam_w / 2) / (cam_w / 2))
+        servoX = round(args.center - args.amplix * (servoMax - servoMed) * (xmed - cam_w / 2) / (cam_w / 2))
         if servoX < servoMin:
           servoX = servoMin
         if servoX > servoMax:

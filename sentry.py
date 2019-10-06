@@ -11,8 +11,7 @@ import pygame
 
 # fix issue: "Could not create cudnn handle"
 # may not be needed on all systems
-from tensorflow.compat.v1 import ConfigProto
-from tensorflow.compat.v1 import InteractiveSession
+from tensorflow.compat.v1 import ConfigProto, InteractiveSession
 config = ConfigProto()
 config.gpu_options.allow_growth = True
 session = InteractiveSession(config=config)

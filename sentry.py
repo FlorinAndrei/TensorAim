@@ -191,8 +191,10 @@ parser = argparse.ArgumentParser(
   - space: reset servo to center
   """),
   formatter_class=argparse.RawTextHelpFormatter)
-parser.add_argument('--center', type=int, default=servoMed, help='servo initial center, to correct servo/camera offset, between ' + str(servoMin) + ' and ' + str(servoMax) + ', default=' + str(servoMed))
-parser.add_argument('--amplix', type=float, default=0.7, help='motion amplitude on X; depends on camera angle and servo; default=0.7')
+parser.add_argument('--center', type=int, default=servoMed,
+  help='servo initial center, to correct servo/camera offset, between ' + str(servoMin) + ' and ' + str(servoMax) + ', default=' + str(servoMed))
+parser.add_argument('--amplix', type=float, default=0.7,
+  help='motion amplitude on X; depends on camera angle and servo; default=0.7')
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 parser.add_argument('--serport', type=str, default='COM3', help='serial port to use for servo; default: COM3')
 args = parser.parse_args()

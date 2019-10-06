@@ -286,5 +286,8 @@ while(True):
     print('nothing')
   # draw what we found
   draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores, labels)
-  if cv2.waitKey(1) & 0xFF == ord('q'):
+  k = cv2.waitKey(1)
+  if k == ord('q'):
     break
+  if k == ord(' '):
+    servoX = args.center

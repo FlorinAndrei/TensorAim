@@ -2,7 +2,7 @@ from keras.models import load_model
 from keras.preprocessing.image import load_img, img_to_array
 import numpy as np
 from PIL import Image, ImageDraw, ImageColor
-import argparse
+import argparse, textwrap
 import cv2
 import time
 import maestro
@@ -176,7 +176,15 @@ servoMin = 4000
 servoMax = 8000
 servoMed = round((servoMin + servoMax) / 2)
 
-parser = argparse.ArgumentParser(description='train the model')
+parser = argparse.ArgumentParser(
+  description=textwrap.dedent("""\
+  Run the model, detect objects, estimate positions, control servo.
+  
+  Hotkeys:
+  -     q: quit
+  - space: reset servo to center
+  """),
+  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument('--center', type=int, default=servoMed, help='servo initial center, to correct servo/camera offset, between ' + str(servoMin) + ' and ' + str(servoMax) + ', default=' + str(servoMed))
 parser.add_argument('--amplix', type=float, default=0.7, help='motion amplitude on X; depends on camera angle and servo; default=0.7')
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')

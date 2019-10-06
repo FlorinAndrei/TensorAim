@@ -216,6 +216,7 @@ pygame.mixer.music.load('pew.wav')
 
 # load yolov3 model
 model = load_model('model.h5')
+print(model.summary())
 # this is the image size that the model expects
 input_w, input_h = 416, 416
 # define the labels

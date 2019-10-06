@@ -179,6 +179,9 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels):
   cv2.imshow('camera', im4cv2big)
 
 
+servoMin = 4000
+servoMax = 8000
+
 parser = argparse.ArgumentParser(description='train the model')
 parser.add_argument('--images', type=str, default='.', help='folder with image files')
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
@@ -186,8 +189,6 @@ args = parser.parse_args()
 
 serport = 'COM3'
 servoOut = 0
-servoMin = 4000
-servoMax = 8000
 # default position
 servoX = round((servoMin + servoMax) / 2)
 

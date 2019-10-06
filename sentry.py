@@ -130,8 +130,11 @@ def do_nms(boxes, nms_thresh):
 def load_image_cv(image, shape):
   width, height = image.shape[1], image.shape[0]
   image = cv2.resize(image, shape)
+  # we got int, we need float
   image = image.astype('float32')
+  # normalize
   image /= 255.0
+  # YOLO expects more dimensions
   image = np.expand_dims(image, 0)
   return image, width, height
 
@@ -161,14 +164,17 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels):
     y1, x1, y2, x2 = box.ymin, box.xmin, box.ymax, box.xmax
     # calculate width and height of the box
     width, height = x2 - x1, y2 - y1
-    # create the shape
+    # create the shape and apply
     label_index = labels.index(v_labels[i])
     label = "%s (%d)" % (v_labels[i], round(v_scores[i]))
     objcolor = list(ImageColor.colormap.keys())[label_index]
     draw.rectangle((x1, y1, x1 + width, y1 + height), fill=None, outline=objcolor, width=1)
     draw.text((x1 + 3, y1 + 1), label, fill=objcolor)
+  # RGB, BGR - different orders are used by PIL and OpenCV
   im4cv2 = cv2.cvtColor(np.array(pilim), cv2.COLOR_BGR2RGB)
+  # zoom the image for convenience
   im4cv2big = cv2.resize(im4cv2, None, fx = 1.7, fy = 1.7)
+  # display annotated image
   cv2.imshow('camera', im4cv2big)
 
 
@@ -191,28 +197,26 @@ parser.add_argument('--defdriver', action='store_true', help='use default system
 parser.add_argument('--serport', type=str, default='COM3', help='serial port to use for servo; default: COM3')
 args = parser.parse_args()
 
+# which output to use on servo
 servoOut = 0
 # default position
 servoX = args.center
-
 has_servo = True
 try:
   servo = maestro.Controller(args.serport)
 except:
   print('Could not connect to controller on port', args.serport)
   has_servo = False
-
+# reset servo to initial position
 if has_servo:
   servo.setTarget(servoOut, servoX)
 
 pygame.mixer.init()
 pygame.mixer.music.load('pew.wav')
 
-cam_w, cam_h = 640, 480
-
 # load yolov3 model
 model = load_model('model.h5')
-# define the expected input shape for the model
+# this is the image size that the model expects
 input_w, input_h = 416, 416
 # define the labels
 labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck",
@@ -230,6 +234,7 @@ anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33
 # define the probability threshold for detected objects
 class_threshold = 0.6
 
+cam_w, cam_h = 640, 480
 if args.defdriver:
   # use default system driver
   cap = cv2.VideoCapture(0)
@@ -271,7 +276,9 @@ while(True):
       vbc = v_boxes[i]
       xmed = round((vbc.xmin + vbc.xmax) / 2)
       if not found_person and v_labels[i] == 'person':
+        # translate image coordinates into servo coordinates
         servoX = round(args.center - args.amplix * (servoMax - servoMed) * (xmed - cam_w / 2) / (cam_w / 2))
+        # just in case servoX is out of bounds
         if servoX < servoMin:
           servoX = servoMin
         if servoX > servoMax:
@@ -287,6 +294,7 @@ while(True):
     print('nothing')
   # draw what we found
   draw_boxes(cvRGBimage, v_boxes, v_labels, v_scores, labels)
+  # read keyboard
   k = cv2.waitKey(1)
   if k == ord('q'):
     break

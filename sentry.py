@@ -183,7 +183,6 @@ servoMin = 4000
 servoMax = 8000
 
 parser = argparse.ArgumentParser(description='train the model')
-parser.add_argument('--images', type=str, default='.', help='folder with image files')
 parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
 args = parser.parse_args()
 

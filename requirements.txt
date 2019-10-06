@@ -4,4 +4,4 @@ Pillow
 opencv-python
 pygame
 pyserial
-tensorflow<=1.*
+tensorflow-gpu<=1.*

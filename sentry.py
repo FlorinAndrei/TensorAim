@@ -1,17 +1,12 @@
-import numpy as np
-from numpy import expand_dims
 from keras.models import load_model
-from keras.preprocessing.image import load_img
-from keras.preprocessing.image import img_to_array
+from keras.preprocessing.image import load_img, img_to_array
+import numpy as np
 from PIL import Image, ImageDraw, ImageColor
 import argparse
 import cv2
-import os
 import time
 import maestro
 import pygame
-from pprint import pprint
-
 
 # fix issue: "Could not create cudnn handle"
 from tensorflow.compat.v1 import ConfigProto
@@ -137,7 +132,7 @@ def load_image_cv(image, shape):
   image = cv2.resize(image, shape)
   image = image.astype('float32')
   image /= 255.0
-  image = expand_dims(image, 0)
+  image = np.expand_dims(image, 0)
   return image, width, height
 
 

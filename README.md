@@ -7,7 +7,7 @@ The system needs to do two things:
 
 With that, action can be taken in the real world. E.g., pick one object category and literally point it out - paint a dot on them with a laser, for example.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xaUEeRtfKmU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![AI paints laser dot on people, tracks motion, goes pew-pew-pew](http://img.youtube.com/vi/xaUEeRtfKmU/0.jpg)](http://www.youtube.com/watch?v=xaUEeRtfKmU "AI paints laser dot on people, tracks motion, goes pew-pew-pew")
 
 ## Current status
 

@@ -7,11 +7,9 @@ The system needs to do two things:
 
 With that, action can be taken in the real world. E.g., pick one object category and literally point it out - paint a dot on them with a laser, for example.
 
+See video here:
+
 [![AI paints laser dot on people, tracks motion, goes pew-pew-pew](http://img.youtube.com/vi/xaUEeRtfKmU/0.jpg)](http://www.youtube.com/watch?v=xaUEeRtfKmU "AI paints laser dot on people, tracks motion, goes pew-pew-pew")
-
-## Current status
-
-Target detection, aiming with servo - ready for testing with laser.
 
 ## Technology
 
@@ -82,6 +80,8 @@ YOLO encapsulation and output parsing code was borrowed from [Huynh Ngoc Anh a.k
 Hardware for the laser mount was designed and built by Victor Andrei.
 
 ## Previous status updates (newest to oldest)
+
+Target detection, aiming with servo - ready for testing with laser.
 
 TensorAim can now detect humans in a live video stream. It can also determine xmin/xmax. Ready to connect to servo for aiming.
 

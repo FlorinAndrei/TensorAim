@@ -20,7 +20,7 @@ def create_model():
 
   # compile the model
   model.compile(optimizer='adam',
-                loss='categorical_crossentropy',
+                loss='sparse_categorical_crossentropy',
                 metrics=['accuracy'])
 
   print(model.summary())

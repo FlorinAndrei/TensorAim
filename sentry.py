@@ -103,8 +103,10 @@ def _interval_overlap(interval_a, interval_b):
 
 
 def bbox_iou(box1, box2):
-  intersect_w = _interval_overlap([box1.xmin, box1.xmax], [box2.xmin, box2.xmax])
-  intersect_h = _interval_overlap([box1.ymin, box1.ymax], [box2.ymin, box2.ymax])
+  intersect_w = _interval_overlap([box1.xmin, box1.xmax],
+    [box2.xmin, box2.xmax])
+  intersect_h = _interval_overlap([box1.ymin, box1.ymax],
+    [box2.ymin, box2.ymax])
   intersect = intersect_w * intersect_h
   w1, h1 = box1.xmax-box1.xmin, box1.ymax-box1.ymin
   w2, h2 = box2.xmax-box2.xmin, box2.ymax-box2.ymin
@@ -169,7 +171,8 @@ def draw_boxes(imdata, v_boxes, v_labels, v_scores, labels):
     label_index = labels.index(v_labels[i])
     label = "%s (%d)" % (v_labels[i], round(v_scores[i]))
     objcolor = list(ImageColor.colormap.keys())[label_index]
-    draw.rectangle((x1, y1, x1 + width, y1 + height), fill=None, outline=objcolor, width=1)
+    draw.rectangle((x1, y1, x1 + width, y1 + height), fill=None,
+      outline=objcolor, width=1)
     draw.text((x1 + 3, y1 + 1), label, fill=objcolor)
   # RGB, BGR - different orders are used by PIL and OpenCV
   im4cv2 = cv2.cvtColor(np.array(pilim), cv2.COLOR_BGR2RGB)
@@ -186,18 +189,21 @@ servoMed = round((servoMin + servoMax) / 2)
 parser = argparse.ArgumentParser(
   description=textwrap.dedent("""\
   Run the model, detect objects, estimate positions, control servo.
-  
+
   Hotkeys:
   -     q: quit
   - space: reset servo to center
   """),
   formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument('--center', type=int, default=servoMed,
-  help='servo initial center, to correct servo/camera offset, between ' + str(servoMin) + ' and ' + str(servoMax) + ', default=' + str(servoMed))
+  help='servo initial center, to correct servo/camera offset, between ' +
+    str(servoMin) + ' and ' + str(servoMax) + ', default=' + str(servoMed))
 parser.add_argument('--amplix', type=float, default=0.7,
   help='motion amplitude on X; depends on camera angle and servo; default=0.7')
-parser.add_argument('--defdriver', action='store_true', help='use default system video driver instead of DSHOW')
-parser.add_argument('--serport', type=str, default='COM3', help='serial port to use for servo; default: COM3')
+parser.add_argument('--defdriver', action='store_true',
+  help='use default system video driver instead of DSHOW')
+parser.add_argument('--serport', type=str, default='COM3',
+  help='serial port to use for servo; default: COM3')
 args = parser.parse_args()
 
 # which output to use on servo
@@ -223,18 +229,21 @@ print(model.summary())
 # this is the image size that the model expects
 input_w, input_h = 416, 416
 # define the labels
-labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck",
-  "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench",
-  "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe",
-  "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard",
-  "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
-  "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana",
-  "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake",
-  "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor", "laptop", "mouse",
-  "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator",
-  "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
+labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train",
+  "truck", "boat", "traffic light", "fire hydrant", "stop sign",
+  "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
+  "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag",
+  "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite",
+  "baseball bat", "baseball glove", "skateboard", "surfboard", "tennis racket",
+  "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana",
+  "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza",
+  "donut", "cake", "chair", "sofa", "pottedplant", "bed", "diningtable",
+  "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
+  "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock",
+  "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
 # define the anchors
-anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33,23]]
+anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119],
+  [10,13, 16,30, 33,23]]
 # define the probability threshold for detected objects
 class_threshold = 0.6
 
@@ -265,7 +274,8 @@ while(True):
   boxes = list()
   for i in range(len(yhat)):
     # decode the output of the network
-    boxes += decode_netout(yhat[i][0], anchors[i], class_threshold, input_h, input_w)
+    boxes += decode_netout(yhat[i][0], anchors[i], class_threshold,
+      input_h, input_w)
   # suppress non-maximal boxes
   do_nms(boxes, 0.5)
   # correct the sizes of the bounding boxes for the shape of the image
@@ -282,7 +292,8 @@ while(True):
       xmed = round((vbc.xmin + vbc.xmax) / 2)
       if not found_person and v_labels[i] == 'person':
         # translate image coordinates into servo coordinates
-        servoX = round(args.center - args.amplix * (servoMax - servoMed) * (xmed - cam_w / 2) / (cam_w / 2))
+        servoX = round(args.center - args.amplix * (servoMax - servoMed) *
+          (xmed - cam_w / 2) / (cam_w / 2))
         # just in case servoX is out of bounds
         if servoX < servoMin:
           servoX = servoMin
@@ -294,7 +305,8 @@ while(True):
         # only track the first person in current frame
         found_person = True
       # rounding numpy floats is weird
-      print(v_labels[i], int(round(v_scores[i])), '\t', servoX, '\tpred:', predtime, 'ms\tbox:', boxtime, 'ms')
+      print(v_labels[i], int(round(v_scores[i])), '\t', servoX,
+        '\tpred:', predtime, 'ms\tbox:', boxtime, 'ms')
   else:
     print('nothing')
   # draw what we found

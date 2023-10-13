@@ -1,0 +1,9 @@
+*.png
+*.p
+*.h5
+training
+logs
+saved_model
+images
+__pycache__
+*.weights

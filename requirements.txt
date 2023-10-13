@@ -1,0 +1,7 @@
+keras<=2.2.*
+numpy
+Pillow
+opencv-python
+pygame
+pyserial
+tensorflow<=1.*
